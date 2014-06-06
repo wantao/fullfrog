@@ -1,0 +1,679 @@
+第三周周报	2
+周四	2
+学习记录	2
+1． 新手引导梳理	2
+2． 成就相关	3
+3． Gm相关	4
+周五	5
+学习记录	5
+遇到问题：	15
+周六	15
+学习记录	15
+遇到问题	17
+
+
+第三周周报
+周四
+学习记录
+　　1．新手引导梳理
+1.1引导步骤guide_step的类型由uint32改为string
+　　　Delimiter // or delimiter $$:将mysql的命令界定符由默认的；改为// 或$$;
+　　　例子：
+　　　mysql> delimiter // 
+　　　　　　
+　　　mysql> CREATE PROCEDURE simpleproc (OUT param1 INT) 
+　　　-> BEGIN 
+　　　-> SELECT COUNT(*) INTO param1 FROM t; 
+　　　-> END; 
+　　　-> // 
+　　　Query OK, 0 rows affected (0.00 sec) 
+　　　　　　
+　　　mysql> delimiter ; 
+
+1.2修改z_gamedb中的player_info中的字段的步骤：
+　　　若要更新
+　　　			F:\wt\myWorkDir\code\server_release_branch\sql_update\1.0.0.0\z_gamedb\gamedb_0021.sql,
+　　　先查看tbl_version表中version_id，若version_id
+　　　为19，则用navicat for mysql 在 z_gamedb上运行
+　　　	F:\wt\myWorkDir\code\server_release_branch\sql_update\1.0.0.0\z_gamedb\gamedb_0020.sql,
+　　　这时gamedb_0020.sql中的update_version会调用z_gamedb中的update_version函数，该	函数将
+　　　Tal_version中的version_id设置为20，然后再运行gamedb_0021.sql，即可跟新成功
+
+1.3服务端暂时只存储客户端发送过来的步骤，不对该步骤进行校验。
+
+　　2．成就相关
+　　　gs_chenjiu.xml
+　　　//成就数据
+　　　message ChenJiuData
+　　　{
+　　　  optional uint32 id=1; //成就ID
+　　　  optional uint32 value=2; //成就ID对应的当前值
+　　　  optional uint32 type=3; //0表示已完成还没领,1表示完成了并领取，2表示还未完成
+　　　}
+　　　
+　　　//成就种类
+　　　message ChenJiuKind
+　　　{
+　　　  optional uint32 kind=1; //成就种类
+　　　  repeated ChenJiuData data=2; //成就数据
+　　　}
+　　　
+　　　//得到成就(触发的)
+　　　message GetChenJiuReq
+　　　{
+　　　
+　　　}
+　　　
+　　　//得到成就(触发的)
+　　　message GetChenJiuAck
+　　　{
+　　　  repeated ChenJiuKind kind=1; //成就种类
+　　　}
+　　　
+　　　//更新一个触发成就
+　　　message UpdateChenJiu
+　　　{
+　　　  optional uint32 kind=1; //成就种类
+　　　  optional ChenJiuData data=2; //成就数据
+　　　}
+　　　
+　　　
+　　　//领取成就奖励
+　　　message GetChenJiuAwardReq
+　　　{
+　　　  optional  uint32  id=1; //成就id
+　　　}
+　　　
+　　　//领取成就奖励
+　　　message GetChenJiuAwardAck
+　　　{
+　　　  optional  int32  err_no=1; //领取结果 
+　　　  optional  uint32  id=2; //成就id
+　　　}
+　　　
+
+　　玩家第一次登陆调用on_player_enter_game.py里边的OnFirstEnterGame，给玩家一个初	始成就任务，给予能够升到2级的经验值，然后调用OnEnterGame，发送当前新手引导步	骤值，之后登陆则只调用OnEnterGame
+
+
+
+　　c_player_level表对应如下
+
+
+
+　　3．Gm相关
+3.1Gm命令获取玩家当前新手引导步骤
+　　　// getguidestep 12 解释：12为玩家ID
+　　　服务器返回
+　　　msg_=cur step =1-1
+
+　　3．2　Gm清除成就步骤
+　　　在 CGMMgr::Init()中写好注册处理函数
+　　　RegisterCmd("clear_chenjiu", e_Level5, &CGMMgr::GM_ClearChenjiu, "clear_chenjiu [playerid]");
+
+　　　// clear_chenjiu 12 12 解释：前一个12玩家Id，后一个12成就Id
+
+
+周五
+学习记录
+Libevent-2.0.21笔记：http://blog.csdn.net/chlaws/article/details/8458588
+./include/event2/listener.h
+事件监听器
+ /**
+   Allocate a new evconnlistener object to listen for incoming TCP connections
+   on a given address.
+
+   @param base The event base to associate the listener with.
+   @param cb A callback to be invoked when a new connection arrives. If the
+      callback is NULL, the listener will be treated as disabled until the
+      callback is set.
+   @param ptr A user-supplied pointer to give to the callback.
+   @param flags Any number of LEV_OPT_* flags
+   @param backlog Passed to the listen() call to determine the length of the
+      acceptable connection backlog.  Set to -1 for a reasonable default.
+   @param addr The address to listen for connections on.
+   @param socklen The length of the address.
+ */
+struct evconnlistener *evconnlistener_new_bind(struct event_base *base,
+    evconnlistener_cb cb, void *ptr, unsigned flags, int backlog,
+　　　const struct sockaddr *sa, int socklen);
+　　　
+　　　
+　　　/**
+　　　   A callback that we invoke when a listener has a new connection.
+　　　
+　　　   @param listener The evconnlistener
+　　　   @param fd The new file descriptor
+　　　   @param addr The source address of the connection
+　　　   @param socklen The length of addr
+　　　   @param user_arg the pointer passed to evconnlistener_new()
+　　　 */
+　　　typedef void (*evconnlistener_cb)(struct evconnlistener *, evutil_socket_t, struct sockaddr *, int socklen, void *);
+　　　
+　　　
+　　　
+　　　/** Flag: Indicates that we should disable the timeout (if any) between when
+　　　 * this socket is closed and when we can listen again on the same port. */
+　　　#define LEV_OPT_REUSEABLE               (1u<<3)
+　　　/** Flag: Indicates that freeing the listener should close the underlying
+　　　 * socket. */
+　　　#define LEV_OPT_CLOSE_ON_FREE           (1u<<1)
+　　　
+　　　生成一个信号事件
+　　　event2/event.h
+　　　#define evsignal_new(b, x, cb, arg)                             \
+　　　        event_new((b), (x), EV_SIGNAL|EV_PERSIST, (cb), (arg))
+
+
+
+/**
+   A callback function for an event.
+
+   It receives three arguments:
+
+   @param fd An fd or signal
+   @param events One or more EV_* flags
+   @param arg A user-supplied argument.
+
+   @see event_new()
+ */
+typedef void (*event_callback_fn)(evutil_socket_t, short, void *);
+
+/**
+  Allocate and asssign a new event structure, ready to be added.
+
+  The function event_new() returns a new event that can be used in
+  future calls to event_add() and event_del().  The fd and events
+  arguments determine which conditions will trigger the event; the
+  callback and callback_arg arguments tell Libevent what to do when the
+:/event_new(
+  events.
+
+  The EV_TIMEOUT flag has no effect here.
+
+  It is okay to have multiple events all listening on the same fds; but
+  they must either all be edge-triggered, or all not be edge triggerd.
+
+  When the event becomes active, the event loop will run the provided
+  callbuck function, with three arguments.  The first will be the provided
+  fd value.  The second will be a bitfield of the events that triggered:
+  EV_READ, EV_WRITE, or EV_SIGNAL.  Here the EV_TIMEOUT flag indicates
+  that a timeout occurred, and EV_ET indicates that an edge-triggered
+  event occurred.  The third event will be the callback_arg pointer that
+  you provide.
+
+  @param base the event base to which the event should be attached.
+  @param fd the file descriptor or signal to be monitored, or -1.
+  @param events desired events to monitor: bitfield of EV_READ, EV_WRITE,
+      EV_SIGNAL, EV_PERSIST, EV_ET.
+  @param callback callback function to be invoked when the event occurs
+  @param callback_arg an argument to be passed to the callback function
+
+  @return a newly allocated struct event that must later be freed with
+    event_free().
+  @see event_free(), event_add(), event_del(), event_assign()
+ */
+
+添加事件
+event2/event.h
+/**
+  Add an event to the set of pending events.
+
+  The function event_add() schedules the execution of the ev event when the
+  event specified in event_assign()/event_new() occurs, or when the time
+  specified in timeout has elapesed.  If atimeout is NULL, no timeout
+  occurs and the function will only be
+  called if a matching event occurs.  The event in the
+  ev argument must be already initialized by event_assign() or event_new()
+  and may not be used
+  in calls to event_assign() until it is no longer pending.
+
+  If the event in the ev argument already has a scheduled timeout, calling
+  event_add() replaces the old timeout with the new one, or clears the old
+  timeout if the timeout argument is NULL.
+
+  @param ev an event struct initialized via event_set()
+  @param timeout the maximum amount of time to wait for the event, or NULL
+         to wait forever
+  @return 0 if successful, or -1 if an error occurred
+  @see event_del(), event_assign(), event_new()
+  */
+int event_add(struct event *ev, const struct timeval *timeout);
+
+
+
+
+事件分发循环
+event2/event.h
+int
+event_base_dispatch(struct event_base *event_base)
+{
+        return (event_base_loop(event_base, 0));
+}
+
+/**
+   Event dispatching loop
+
+  This loop will run the event base until either there are no more added
+  events, or until something calls event_base_loopbreak() or
+  event_base_loopexit().
+
+  @param base the event_base structure returned by event_base_new() or
+     event_base_new_with_config()
+  @return 0 if successful, -1 if an error occurred, or 1 if no events were
+    registered.
+  @see event_base_loop()
+ */
+int event_base_dispatch(struct event_base *);
+
+
+/**
+  Wait for events to become active, and run their callbacks.
+
+  This is a more flexible version of event_base_dispatch().
+
+  By default, this loop will run the event base until either there are no more
+  added events, or until something calls event_base_loopbreak() or
+  evenet_base_loopexit().  You can override this behavior with the 'flags'
+  argument.
+
+  @param eb the event_base structure returned by event_base_new() or
+     event_base_new_with_config()
+  @param flags any combination of EVLOOP_ONCE | EVLOOP_NONBLOCK
+  @return 0 if successful, -1 if an error occurred, or 1 if no events were
+    registered.
+  @see event_base_loopexit(), event_base_dispatch(), EVLOOP_ONCE,
+     EVLOOP_NONBLOCK
+  */
+int event_base_loop(struct event_base *, int);
+
+
+释放事件监听器
+event2/listener.h
+/**
+   Disable and deallocate an evconnlistener.
+ */
+void evconnlistener_free(struct evconnlistener *lev);
+
+/**
+   Deallocate a struct event * returned by event_new().
+
+   If the event is pending or active, first make it non-pending and
+   non-active.
+ */
+
+释放event_new产生的事件
+event2/event.h
+/**
+   Deallocate a struct event * returned by event_new().
+
+   If the event is pending or active, first make it non-pending and
+   non-active.
+ */
+void event_free(struct event *);
+
+释放事件base
+event2/event.h
+/**
+  Deallocate all memory associated with an event_base, and free the base.
+
+  Note that this function will not close any fds or free any memory passed
+  to event_new as the argument to callback.
+
+  @param eb an event_base to be freed
+ */
+void event_base_free(struct event_base *);
+
+
+监听器回调函数里边的内容
+event2/bufferevent.h
+创建套件字bufferevent
+/**
+  Create a new socket bufferevent over an existing socket.
+
+  @param base the event base to associate with the new bufferevent.
+  @param fd the file descriptor from which data is read and written to.
+            This file descriptor is not allowed to be a pipe(2).
+            It is safe to set the fd to -1, so long as you later
+            set it with bufferevent_setfd or bufferevent_socket_connect().
+  @param options Zero or more BEV_OPT_* flags
+  @return a pointer to a newly allocated bufferevent struct, or NULL if an
+          error occurred
+  @see bufferevent_free()
+  */
+struct bufferevent *bufferevent_socket_new(struct event_base *base, evutil_socket_t fd, int options);
+
+
+
+为套接字bufferevent设置回调函数
+./include/event2/bufferevent.h
+/**
+  Changes the callbacks for a bufferevent.
+
+  @param bufev the bufferevent object for which to change callbacks
+  @param readcb callback to invoke when there is data to be read, or NULL if
+         no callback is desired
+  @param writecb callback to invoke when the file descriptor is ready for
+         writing, or NULL if no callback is desired
+  @param eventcb callback to invoke when there is an event on the file
+         descriptor
+  @param cbarg an argument that will be supplied to each of the callbacks
+         (readcb, writecb, and errorcb)
+  @see bufferevent_new()
+  */
+void bufferevent_setcb(struct bufferevent *bufev,
+    bufferevent_data_cb readcb, bufferevent_data_cb writecb,
+　　bufferevent_event_cb eventcb, void *cbarg);
+　　
+读写回调，事件回调定义
+/**
+   A read or write callback for a bufferevent.
+
+   The read callback is triggered when new data arrives in the input
+   buffer and the amount of readable data exceed the low watermark
+   which is 0 by default.
+
+   The write callback is triggered if the write buffer has been
+   exhausted or fell below its low watermark.
+
+   @param bev the bufferevent that triggered the callback
+   @param ctx the user-specified context for this bufferevent
+ */
+typedef void (*bufferevent_data_cb)(struct bufferevent *bev, void *ctx);
+
+/**
+   An event/error callback for a bufferevent.
+
+   The event callback is triggered if either an EOF condition or another
+   unrecoverable error was encountered.
+
+   @param bev the bufferevent for which the error condition was reached
+   @param what a conjunction of flags: BEV_EVENT_READING or BEV_EVENT_WRITING
+          to indicate if the error was encountered on the read or write path,
+          and one of the following flags: BEV_EVENT_EOF, BEV_EVENT_ERROR,
+          BEV_EVENT_TIMEOUT, BEV_EVENT_CONNECTED.
+
+   @param ctx the user-specified context for this bufferevent
+*/
+typedef void (*bufferevent_event_cb)(struct bufferevent *bev, short what, void *ctx);
+
+
+使能一个bufferevent
+./include/event2/bufferevent.h
+/**
+  Enable a bufferevent.
+
+  @param bufev the bufferevent to be enabled
+  @param event any combination of EV_READ | EV_WRITE.
+  @return 0 if successful, or -1 if an error occurred
+  @see bufferevent_disable()
+ */
+int bufferevent_enable(struct bufferevent *bufev, short event);
+
+
+
+Disable一个bufferevent
+
+/**
+  Disable a bufferevent.
+
+  @param bufev the bufferevent to be disabled
+  @param event any combination of EV_READ | EV_WRITE.
+  @return 0 if successful, or -1 if an error occurred
+  @see bufferevent_enable()
+ */
+int bufferevent_disable(struct bufferevent *bufev, short event);
+
+
+往bufferevent的buffer中写数据
+/**
+  Write data to a bufferevent buffer.
+
+  The bufferevent_write() function can be used to write data to the file
+  descriptor.  The data is appended to the output buffer and written to the
+  descriptor automatically as it becomes available for writing.
+
+  @param bufev the bufferevent to be written to
+  @param data a pointer to the data to be written
+  @param size the length of the data, in bytes
+  @return 0 if successful, or -1 if an error occurred
+  @see bufferevent_write_buffer()
+  */
+int bufferevent_write(struct bufferevent *bufev,
+　　const void *data, size_t size);
+　　
+　　
+　　//获取输出buffer
+　　./include/event2/bufferevent.h
+　　struct evbuffer *bufferevent_get_input(struct bufferevent *bufev);
+　　
+　　/**
+　　   Returns the output buffer.
+　　
+　　   The user MUST NOT set the callback on this buffer.
+　　
+　　   When filters are being used, the filters need to be manually
+　　   triggered if the output buffer was manipulated.
+　　
+　　   @param bufev the bufferevent from which to get the evbuffer
+　　   @return the evbuffer object for the output buffer
+　　 */
+
+　　　
+获取存储在evbuffer中的字节数
+./include/event2/buffer.h
+/**
+  Returns the total number of bytes stored in the evbuffer
+
+  @param buf pointer to the evbuffer
+  @return the number of bytes stored in the evbuffer
+*/
+size_t evbuffer_get_length(const struct evbuffer *buf);
+
+
+释放bufferevent结构相关的空间
+./include/event2/bufferevent.h
+/**
+  Deallocate the storage associated with a bufferevent structure.
+
+  @param bufev the bufferevent structure to be freed.
+  */
+void bufferevent_free(struct bufferevent *bufev);
+
+
+
+
+./include/event2/bufferevent.h
+
+/** @name Bufferevent event codes
+
+    These flags are passed as arguments to a bufferevent's event callback.
+
+    @{
+*/
+#define BEV_EVENT_READING       0x01    /**< error encountered while reading */
+#define BEV_EVENT_WRITING       0x02    /**< error encountered while writing */
+#define BEV_EVENT_EOF           0x10    /**< eof file reached */
+#define BEV_EVENT_ERROR         0x20    /**< unrecoverable error encountered */
+#define BEV_EVENT_TIMEOUT       0x40    /**< user-specified timeout reached */
+#define BEV_EVENT_CONNECTED     0x80    /**< connect operation finished. */
+/**@}*/
+
+为事件设置读写超时
+/**
+  Set the read and write timeout for a bufferevent.
+
+  A bufferevent's timeout will fire the first time that the indicated
+  amount of time has elapsed since a successful read or write operation,
+  during which the bufferevent was trying to read or write.
+
+  (In other words, if reading or writing is disabled, or if the
+  bufferevent's read or write operation has been suspended because
+  there's no data to write, or not enough banwidth, or so on, the
+  timeout isn't active.  The timeout only becomes active when we we're
+  willing to actually read or write.)
+
+  Calling bufferevent_enable or setting a timeout for a bufferevent
+  whose timeout is already pending resets its timeout.
+
+  If the timeout elapses, the corresponding operation (EV_READ or
+  EV_WRITE) becomes disabled until you re-enable it again.  The
+  bufferevent's event callback is called with the
+  BEV_EVENT_TIMEOUT|BEV_EVENT_READING or
+  BEV_EVENT_TIMEOUT|BEV_EVENT_WRITING.
+
+  @param bufev the bufferevent to be modified
+  @param timeout_read the read timeout, or NULL
+  @param timeout_write the write timeout, or NULL
+ */
+int bufferevent_set_timeouts(struct bufferevent *bufev,
+　　const struct timeval *timeout_read, const struct timeval *timeout_write);
+　　
+　　
+EV_*含义
+./include/event2/event.h
+/**
+ * @name event flags
+ *
+ * Flags to pass to event_new(), event_assign(), event_pending(), and
+ * anything else with an argument of the form "short events"
+ */
+/**@{*/
+/** Indicates that a timeout has occurred.  It's not necessary to pass
+ * this flag to event_for new()/event_assign() to get a timeout. */
+#define EV_TIMEOUT      0x01
+/** Wait for a socket or FD to become readable */
+#define EV_READ         0x02
+/** Wait for a socket or FD to become writeable */
+#define EV_WRITE        0x04
+/** Wait for a POSIX signal to be raised*/
+#define EV_SIGNAL       0x08
+/**
+ * Persistent event: won't get removed automatically when activated.
+ *
+ * When a persistent event with a timeout becomes activated, its timeout
+ * is reset to 0.
+ */
+#define EV_PERSIST      0x10
+/** Select edge-triggered behavior, if supported by the backend. */
+#define EV_ET       0x20
+/**@}*/
+
+
+bufferevent_read(bev,buf,size),默认一次接收4k的数据
+
+
+
+遇到问题：
+1，测试客户端100ms发送一次数据，服务端返回对应数据的过程中遇到问题
+客户端发出去的包的数量偶尔大于接收到包的数量？
+
+2，当客户端发送的数据量大于4k时，服务端如何设置循环接收，将接收到的数据块，组装成
+一个完整包，用于后续解析？
+先用bufferevent_read()读取数据头，解析数据头，看后续需要接收多少数据体，再调用bufferevent_read()读取数据体，并对数据体解析。
+
+
+cMake相关
+SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+将生成的可执行程序，放到放到当前工程目录下的bin目录下
+
+在主工程CMakeList.txt里边添加动态库搜索路径
+LINK_DIRECTORIES(/usr/lib/lib)
+
+Vs为工程添加头文件路径：右键工程（srlib）属性->配置属性->c/c++->常规->附加包含目录
+
+
+
+
+
+周六
+学习记录
+Epoll
+Epoll_create()接口
+/usr/include/sys/epoll.h
+/* Creates an epoll instance.  Returns an fd for the new instance.
+   The "size" parameter is a hint specifying the number of file
+   descriptors to be associated with the new instance.  The fd
+   returned by epoll_create() should be closed with close().  */
+extern int epoll_create (int __size) __THROW;
+
+Errno返回值说明
+/usr/include/asm-generic/errno-base.h
+#define EINTR            4      /* Interrupted system call */
+#define EAGAIN          11      /* Try again */
+
+
+Epoll_event结构体
+/usr/include/sys/epoll.h
+typedef union epoll_data
+{
+  void *ptr;
+  int fd;
+  uint32_t u32;
+  uint64_t u64;
+} epoll_data_t;
+
+struct epoll_event
+{
+  uint32_t events;      /* Epoll events */
+  epoll_data_t data;    /* User data variable */
+} __attribute__ ((__packed__));
+
+
+
+Epoll_ctl（）接口说明
+/usr/include/sys/epoll.h
+/* Manipulate an epoll instance "epfd". Returns 0 in case of success,
+   -1 in case of error ( the "errno" variable will contain the
+   specific error code ) The "op" parameter is one of the EPOLL_CTL_*
+   constants defined above. The "fd" parameter is the target of the
+   operation. The "event" parameter describes which events the caller
+   is interested in and any associated user data.  */
+extern int epoll_ctl (int __epfd, int __op, int __fd,
+                      struct epoll_event *__event) __THROW;
+
+Gdb调试，跳出循环语句
+Until + 行数
+
+
+查看断点
+Info b
+
+删除出断点
+Delete 1-5
+
+EPOLL_EVENTS枚举
+enum EPOLL_EVENTS
+  {
+    EPOLLIN = 0x001,
+#define EPOLLIN EPOLLIN
+    EPOLLPRI = 0x002,
+#define EPOLLPRI EPOLLPRI
+    EPOLLOUT = 0x004,
+#define EPOLLOUT EPOLLOUT
+    EPOLLRDNORM = 0x040,
+#define EPOLLRDNORM EPOLLRDNORM
+    EPOLLRDBAND = 0x080,
+#define EPOLLRDBAND EPOLLRDBAND
+    EPOLLWRNORM = 0x100,
+#define EPOLLWRNORM EPOLLWRNORM
+    EPOLLWRBAND = 0x200,
+#define EPOLLWRBAND EPOLLWRBAND
+    EPOLLMSG = 0x400,
+#define EPOLLMSG EPOLLMSG
+    EPOLLERR = 0x008,
+#define EPOLLERR EPOLLERR
+    EPOLLHUP = 0x010,
+#define EPOLLHUP EPOLLHUP
+    EPOLLRDHUP = 0x2000,
+#define EPOLLRDHUP EPOLLRDHUP
+    EPOLLONESHOT = (1 << 30),
+#define EPOLLONESHOT EPOLLONESHOT
+    EPOLLET = (1 << 31)
+#define EPOLLET EPOLLET
+  };
+
+
+遇到问题
+Libevent echo服务器并发测试过程中遇到问题，每次连接数超过1024，就会提示Too many open files的问题，导致连接数不能增加？
+解决：用ulimit -n 得到1024，原来linux下单个进程默认容许打开的文件描述符为1024个，所以连接数超过1024，就会提示Too many open files，这时增大单个进程能够打开的最大文件描述符数，如下：假如增大到4096，1，ulimit -HSn 4096 2，让设置永久生效，将ulimit -HSn 4096添加到/etc/profile.
+设置过后，单进程能打开的最大文件描述符数就达到了4096，增大了并发量
