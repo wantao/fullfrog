@@ -1,1 +1,1 @@
-gcc client-test.c -o client-test.out -lpthread -g
+g++ client-test.c -o client-test.out -lpthread -g

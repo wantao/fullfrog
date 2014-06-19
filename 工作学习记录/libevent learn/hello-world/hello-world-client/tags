@@ -1,0 +1,19 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+MAX_BUFF_SIZE	client-test.c	19;"	d	file:
+create_thread	client-test.c	/^void create_thread()$/;"	f
+g_data_size	client-test.c	/^static unsigned int g_data_size = 1024;$/;"	v	file:
+g_one_thread_loop_connect_count	client-test.c	/^static unsigned int g_one_thread_loop_connect_count = 100;$/;"	v	file:
+g_sendData	client-test.c	/^static char* g_sendData = NULL;$/;"	v	file:
+g_server_ip	client-test.c	/^static char* g_server_ip = "192.168.238.129";$/;"	v	file:
+g_server_port	client-test.c	/^static unsigned int g_server_port = 9995;$/;"	v	file:
+g_thread_counts	client-test.c	/^static unsigned int g_thread_counts = 10;$/;"	v	file:
+main	client-test.c	/^int main(int argc, char** argv)$/;"	f
+recvData	client-test.c	/^bool recvData(pthread_t id,int fd,char* pData,int pDataLen)$/;"	f
+sendData	client-test.c	/^bool sendData(pthread_t id,int fd,char* pData,int pDataLen)$/;"	f
+tcp_connect	client-test.c	/^int tcp_connect(char* server_ip, unsigned int server_port)$/;"	f
+tcp_connect_func	client-test.c	/^void* tcp_connect_func(void* pArg)$/;"	f

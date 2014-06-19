@@ -24,6 +24,8 @@
 #include <event2/listener.h>
 #include <event2/util.h>
 #include <event2/event.h>
+#include <event2/buffer_compat.h>
+#include "evbuffer-internal.h"
 
 static const char MESSAGE[] = "Hello, World!\n";
 
@@ -55,6 +57,8 @@ main(int argc, char **argv)
 		return 1;
 	}
 
+    const char* method = event_base_get_method(base);
+    printf("method:%s\n",method);
 	memset(&sin, 0, sizeof(sin));
 	sin.sin_family = AF_INET;
 	sin.sin_port = htons(PORT);
@@ -99,9 +103,9 @@ listener_cb(struct evconnlistener *listener, evutil_socket_t fd,
 		event_base_loopbreak(base);
 		return;
 	}
-    struct timeval readcb_delay = {2,0};
+    /*struct timeval readcb_delay = {2,0};
     struct timeval writecb_delay = {5,0};
-    bufferevent_set_timeouts(bev,&readcb_delay,&writecb_delay);
+    bufferevent_set_timeouts(bev,&readcb_delay,&writecb_delay);*/
 	bufferevent_setcb(bev, conn_readcb, conn_writecb, conn_eventcb, NULL);
 	bufferevent_enable(bev, EV_WRITE|EV_READ|EV_TIMEOUT|EV_ET|EV_PERSIST);
 	//bufferevent_disable(bev, EV_READ);
@@ -113,6 +117,7 @@ static void
 conn_writecb(struct bufferevent *bev, void *user_data)
 {
 	struct evbuffer *output = bufferevent_get_output(bev);
+    printf("output totalSize:%d\n",(size_t)(output->total_len));
 	if (evbuffer_get_length(output) == 0) {
 		printf("flushed answer\n");
 		//bufferevent_free(bev);
@@ -123,6 +128,7 @@ static void
 conn_readcb(struct bufferevent *bev, void *user_data)
 {
     struct evbuffer *input =bufferevent_get_input(bev);
+    printf("input totalSize:%d\n",input->total_len);
     char dataBuf[14000] = {0};
     int buffSize = evbuffer_get_length(input);
     printf("buffSize:%d\n",buffSize);
@@ -131,6 +137,8 @@ conn_readcb(struct bufferevent *bev, void *user_data)
         int actualReadBytes = bufferevent_read(bev,dataBuf,buffSize);
         printf("actualReadBytes:%d\n",actualReadBytes);
         bufferevent_write(bev, dataBuf, actualReadBytes);
+        struct evbuffer *output = bufferevent_get_output(bev);
+        printf("in conn_readcb output totalSize:%d\n",(size_t)(output->total_len));
     }
 }
     
