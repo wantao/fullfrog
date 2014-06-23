@@ -1,0 +1,293 @@
+周一	3
+1． 上周工作总结	3
+2． 本周工作安排	3
+3． 宠物强化模块熟悉	3
+3．1 模块代码	3
+3．2 配置文件	3
+3．3 升级协议	3
+3．4 升级接口	4
+3．5 升级（包括等级和技能等级）成功后，需更新升级任务列表，并通知前端	4
+3．5.1 任务更新通知协议	4
+3．5.2 任务更新接口	5
+3．5.3 任务更新表	5
+3．6 宠物升级成功后，属性发生改变，需将升级成功后的宠物重新通知前端	5
+3．6.1 宠物修改通知协议	5
+3．6.2 宠物修改通知接口	6
+3．6.3 宠物修改相关表	6
+3．7 如果升级的是编队中的宠物，并且升级后，编队战斗力发生了变化，发送战斗力更新通知	6
+3．7.1 战斗力更新通知协议	6
+3．7.2 战斗力更新通知接口	7
+3．7.3 战斗力更新表	7
+3．8 宠物技能升级，还需检测是否有宠物技能升级成就触发	7
+3．9 宠物进化协议	7
+3．10 宠物进化接口	8
+3．11 宠物可进化，需删除被进化的宠物和被吞噬的宠物，并通知前端	8
+3．11.1 通知协议	8
+3．11.2 通知接口	8
+3．12 获得进化宠物（一个已开启的宠物），通知前端	8
+3．12.1 通知协议	8
+3．12.2 通知接口	8
+3．12.3 成就触发检查	9
+3．13 将进化得到的宠物加到宠物列表后，还需通知前端	9
+3．13.1 通知协议	9
+3．13.2 通知接口	9
+3．14 如果被进化的宠物在编队中，还行替换编队，并更新编队信息	9
+4． Gm命令接口，用于直接修改玩家、宠物等的相关信息	9
+4．1 添加宠物命令	10
+4．2 显示玩家宠物	10
+4．3 为宠物添加经验	10
+
+
+周一
+　　1．上周工作总结
+　　1．1Linux环境libevent epoll模型通信测试。
+　　1．2开区数据库脚本自动安装
+　　2．本周工作安排
+　　2．1宠物强化模块熟悉
+　　2．2Pvp系统模块熟悉
+　　2．3用libevent做一个游戏网关的demo
+　　　       要求：
+　　　   网络负载均衡，转发大量连接的数据到目标
+　　　   安全：简单的防火墙，连接校验，超时
+
+
+　　3．宠物强化模块熟悉
+　　3．1模块代码
+　　　gs_biology_streng.cpp
+　　3．2配置文件
+　　　gs_streng.xml
+　　3．3升级协议
+　　　//宠物升级
+　　　message  PetUpgradeReq
+　　　{
+　　　	optional uint64 id = 1; //宠物唯一id
+　　　	repeated uint64 tunshi_pet = 2;//被吞噬的宠物唯一ID
+　　　}
+　　　
+　　　message  PetUpgradeAck
+　　　{
+　　　	optional uint64 id = 1; //宠物唯一id
+　　　	repeated uint64 tunshi_pet = 2;//被吞噬的宠物
+　　　	optional int32 err_no = 3;//错误码
+　　　}
+　　3．4升级接口
+　　　void CClientListen::OnRecvPetUpgradeReq
+　　3．5升级（包括等级和技能等级）成功后，需更新升级任务列表，并通知前端
+　　3．5.1任务更新通知协议
+　　　message UpdateQuestNtf
+　　　{
+　　　  repeated QuestUpdateData data=1;
+　　　}
+　　　
+　　　message QuestUpdateData
+　　　{
+　　　  optional uint32 id=1;
+　　　  optional uint32 current_count=2;
+　　　  optional bool is_finished=3;
+　　　  optional bool is_awarded=4;
+　　　  optional Period period=5;
+　　　}
+　　　enum Period
+　　　{
+　　　  E_NONE=0;
+　　　  E_DAILY=1;
+　　　  E_WEEKLY=2;
+　　　  E_FESTIVAL=3;
+　　　}
+　　3．5.2任务更新接口
+　　　void CPlayer::UpdateQuestDataUpdateQuestData
+　　3．5.3任务更新表
+　　　player_quest
+
+　　3．6宠物升级成功后，属性发生改变，需将升级成功后的宠物重新通知前端
+　　3．6.1宠物修改通知协议
+　　　// 修改一个宠物的数据
+　　　message UpdatePet
+　　　{
+　　　	optional PetRecord pet=1;
+　　　}
+　　　// 宠物数据
+　　　message PetRecord
+　　　{
+　　　	optional  uint64            qwid = 1; //宠物唯一id
+　　　	optional  uint32            pet_id=2;   // 所属宠物的ID
+　　　	optional  PET_POSITION      position=3;  //宠物所处的位置   
+　　　    optional uint32             bind = 4;  //是否绑定  1=绑定的，0=不绑定或没有绑定
+　　　	optional uint32             recover=5;           //宠物的回复力
+　　　	optional float              dps=6;             //宠物的秒伤
+　　　	optional uint32             hp=7;               //宠物的hp
+　　　	optional uint32             level=8;           //宠物等级
+　　　	optional uint32             exp=9;             //宠物经验
+　　　	optional uint32             action_skill=10;    //主动技能
+　　　	optional uint32             leader_skill=11;    //队长技能
+　　　	repeated uint32             passive_skill=12;    //可习得被动技能
+　　　	optional int64              create_time = 13;    //创建时间
+　　　	optional uint32             protect=14;          //是否保护 1保护 0非保护
+			optional uint32             skill_level=15;      //主动技能等级
+			repeated uint64             equip_id = 16;       //装备唯一ID
+　　　}
+　　　enum PET_POSITION
+　　　{
+　　　    e_pet_in_group=0;        //0：在培养包裹中
+　　　    e_pet_in_sell=1;         //1：寄售中
+　　　}
+　　3．6.2宠物修改通知接口
+　　　void CPlayer::SendUpdatePet
+　　3．6.3宠物修改相关表
+　　　Player_pet
+
+　　3．7如果升级的是编队中的宠物，并且升级后，编队战斗力发生了变化，发送战斗力更新通知
+　　3．7.1战斗力更新通知协议
+　　　// 编队更新
+　　　message BianDuiNtf
+　　　{
+　　　  optional BianDuiData   queue=1; //编队
+　　　}
+　　　//编队里的一条记录
+　　　message PetInBianDui
+　　　{
+　　　	optional uint64 pet_id=1;   //宠物id
+　　　	optional uint32 idx=2;      //宠物所在阵形相对坐标系中的下标[0,x]
+　　　}
+　　　
+　　　//一个编队里的数据
+　　　message BianDuiData
+　　　{
+　　　	optional uint32       index=1; //编队序号 [0, 1, ...] 0 是默认第一编队，1 是第二编队
+　　　	optional string       name=2; //编队名字
+　　　	optional uint64       admin_pet_id=3; //统帅id
+　　　	repeated PetInBianDui pet=4; //编入队伍中的武将
+　　　	optional int32        total_attack=5; //编队总战斗力
+　　　}
+
+　　3．7.2战斗力更新通知接口
+　　　CPlayer::SendBianDuiNtf
+
+　　3．7.3战斗力更新表
+　　　player_queue
+
+　　3．8宠物技能升级，还需检测是否有宠物技能升级成就触发
+
+　　　CChenjiuMgr::Instance().CheckTitle(player, SCheckChenjiuParam(e_chenjiu_pet_skill, gsconst::e_ttid_pet_skill_upgrade, pBiology->GetActiveSkillLevel(), true));
+　　　
+
+　　3．9宠物进化协议
+　　　//宠物进化
+　　　message  PetEvolveReq
+　　　{
+　　　	optional uint64 id = 1; //宠物唯一id
+　　　}
+　　　
+　　　message  PetEvolveAck
+　　　{
+　　　	optional uint64 id = 1; //宠物唯一id
+　　　	optional int32 err_no = 2;//错误码
+　　　}
+　　　
+　　3．10宠物进化接口
+　　　void CClientListen::OnRecvPetEvolveReq
+
+
+　　3．11宠物可进化，需删除被进化的宠物和被吞噬的宠物，并通知前端
+　　3．11.1通知协议
+　　　// 删除一个宠物
+　　　message DelPet
+　　　{
+　　　	optional uint64 id=1;
+　　　}
+　　3．11.2通知接口
+　　　bool CPlayer::TakePetToPetsPkg-》SendToClient(::protoc::DelPet, pet)
+
+　　3．12获得进化宠物（一个已开启的宠物），通知前端
+　　3．12.1通知协议
+　　　message NewPetOpenedNtf
+　　　{
+　　　  optional uint32 id = 1;
+　　　}
+　　3．12.2通知接口
+　　　bool CPlayer::AddPetOpened(UINT32 qwID)-》SendToClient(protoc::NewPetOpenedNtf, ntf);
+　　3．12.3成就触发检查
+　　　CChenjiuMgr::Instance().CheckTitle(*this, SCheckChenjiuParam(e_chenjiu_collect_kind, gsconst::e_ttid_nothing, 0));
+　　　 CChenjiuMgr::Instance().CheckTitle(*this, SCheckChenjiuParam(e_chenjiu_collect_number, gsconst::e_ttid_pet_number, 1));
+　　　    CChenjiuMgr::Instance().CheckTitle(*this, SCheckChenjiuParam(e_chenjiu_collect_star, gsconst::e_ttid_collect_star, pBiology->GetPetProperty()->m_byRare, true));
+
+　　3．13将进化得到的宠物加到宠物列表后，还需通知前端
+　　3．13.1通知协议
+　　　// 增加一个宠物
+　　　message AddPet
+　　　{
+　　　	optional PetRecord pet=1;
+　　　}
+　　3．13.2通知接口
+　　　bool CPlayer::AddPetToPetsPkg-》SendToClient(::protoc::AddPet, pet);
+
+　　3．14如果被进化的宠物在编队中，还行替换编队，并更新编队信息
+　　　player.ReplacePetPosInQueue(qwBeforeID, pEvolvePet->GetID());
+
+
+
+
+　　4．Gm命令接口，用于直接修改玩家、宠物等的相关信息
+　　　bool CGMMgr::Init（）
+　　4．1添加宠物命令
+　　　// addonepet 5（宠物id）
+
+　　4．2显示玩家宠物
+　　　// showpets 383（玩家id）
+
+　　4．3为宠物添加经验
+　　　// addpetexp 18200001(宠物id) 1000000（增加的经验值）
+　　　
+　　　周二
+　　　Pvp模块熟悉
+　　　点击对战
+　　　得到自己当前pvp数据
+　　　协议
+　　　message GetCurPvpDataReq
+　　　{
+　　　}
+　　　
+　　　message GetCurPvpDataAck
+　　　{
+　　　  optional uint32 group_id=1; //组ID
+　　　  optional uint32 score=2; //总积分
+　　　  optional uint32 sum_count=3; //竞技的总次数
+　　　  optional uint32 win_count=4; //竞技赢的次数
+　　　  optional uint32 today_count=5; //今日竞技的次数
+　　　  optional bool   has_award=6; //是否已领奖 false:没领 true:已领
+　　　  optional int64  cd_time=7; //cd时间
+　　　  optional uint32 rank=8; //当前组的排名
+　　　}
+　　　接口
+　　　void CClientListen::OnRecvGetCurPvpDataReq(CPlayer& player, UINT16 wMsgID, const void* data, INT size)
+　　　
+　　　
+　　　 //得到全部的排名
+　　　协议
+　　　// pvp数据
+　　　message PvpData
+　　　{
+　　　  optional uint64 player_id=1;//玩家ID
+　　　  optional string name=2;//玩家名字
+　　　  optional uint32 head_id=3;//好友头像ID
+　　　  optional uint32 level=4; //玩家等级
+　　　  optional uint32 score=5;//玩家积分
+　　　  optional uint32 rank=6; //玩家排名
+　　　  optional bool   sex=7; //玩家性别 性别false男  true女
+　　　}
+　　　
+　　　message GetAllRankReq
+　　　{
+　　　  optional int32 idx=1; //位置,某一页数据
+　　　}
+　　　
+　　　message GetAllRankAck
+　　　{
+　　　  optional int32 idx=1; //位置,某一页数据
+　　　  repeated PvpData data=2; //玩家pvp排名数据
+　　　}
+　　　接口
+　　　void CClientListen::OnRecvGetAllRankReq(CPlayer& player, UINT16 wMsgID, const void* data, INT size)
+　　　
+
+　　　Mysql 关键词DISTINCT 用于返回唯一不同的值。
