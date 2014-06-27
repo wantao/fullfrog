@@ -1,0 +1,12 @@
+<root>
+  <!--
+  	plugSet:插件集合
+  	id:编号
+	isLoad:是否启动时加载，0:否，1:是
+	path:插件路径
+  	desc 描述
+  -->
+    <plugSet>
+        <item id="1" isLoad="0" path="../dependLib/protoPlug.so" desc="协议插件"/>
+    </plugSet>
+</root>

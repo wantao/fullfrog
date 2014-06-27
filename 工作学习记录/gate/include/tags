@@ -1,0 +1,300 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+AFX_MARKUPSTL_H__948A2705_9E68_11D2_A0BF_00105A27C570__INCLUDED_	MarkupSTL.h	10;"	d
+Add	MarkupSTL.h	/^		void Add() { ++nTop; if (nTop==nSize) Alloc(nSize*2+6); };$/;"	f	struct:CMarkupSTL::NodeStack
+AddAttrib	MarkupSTL.h	/^	bool AddAttrib( const char* szAttrib, const char* szValue ) { return x_SetAttrib(m_iPos,szAttrib,szValue); };$/;"	f	class:CMarkupSTL
+AddAttrib	MarkupSTL.h	/^	bool AddAttrib( const char* szAttrib, int nValue ) { return x_SetAttrib(m_iPos,szAttrib,nValue); };$/;"	f	class:CMarkupSTL
+AddChildAttrib	MarkupSTL.h	/^	bool AddChildAttrib( const char* szAttrib, const char* szValue ) { return x_SetAttrib(m_iPosChild,szAttrib,szValue); };$/;"	f	class:CMarkupSTL
+AddChildAttrib	MarkupSTL.h	/^	bool AddChildAttrib( const char* szAttrib, int nValue ) { return x_SetAttrib(m_iPosChild,szAttrib,nValue); };$/;"	f	class:CMarkupSTL
+AddChildElem	MarkupSTL.h	/^	bool AddChildElem( const char* szName, const char* szData=NULL, int nFlags=0 ) { return x_AddElem(szName,szData,nFlags|MNF_CHILD); };$/;"	f	class:CMarkupSTL
+AddChildElem	MarkupSTL.h	/^	bool AddChildElem( const char* szName, int nValue, int nFlags=0 ) { return x_AddElem(szName,nValue,nFlags|MNF_CHILD); };$/;"	f	class:CMarkupSTL
+AddChildSubDoc	MarkupSTL.h	/^	bool AddChildSubDoc( const char* szSubDoc ) { return x_AddSubDoc(szSubDoc,MNF_CHILD); };$/;"	f	class:CMarkupSTL
+AddElem	MarkupSTL.h	/^	bool AddElem( const char* szName, const char* szData=NULL, int nFlags=0 ) { return x_AddElem(szName,szData,nFlags); };$/;"	f	class:CMarkupSTL
+AddElem	MarkupSTL.h	/^	bool AddElem( const char* szName, int nValue, int nFlags=0 ) { return x_AddElem(szName,nValue,nFlags); };$/;"	f	class:CMarkupSTL
+AddNode	MarkupSTL.h	/^	bool AddNode( int nType, const char* szText ) { return x_AddNode(nType,szText,0); };$/;"	f	class:CMarkupSTL
+AddSubDoc	MarkupSTL.h	/^	bool AddSubDoc( const char* szSubDoc ) { return x_AddSubDoc(szSubDoc,0); };$/;"	f	class:CMarkupSTL
+AdjustStartTagLen	MarkupSTL.h	/^		void AdjustStartTagLen( int n ) { nTagLengths += n; };$/;"	f	struct:CMarkupSTL::ElemPos
+Alloc	MarkupSTL.h	/^		void Alloc( int nNewSize ) { NodePos* pNNew = new NodePos[nNewSize]; Copy(pNNew); nSize=nNewSize; };$/;"	f	struct:CMarkupSTL::NodeStack
+AllocMapTable	MarkupSTL.h	/^		void AllocMapTable() { pTable = new SavedPos*[SPM_SIZE]; for (int n=0; n<SPM_SIZE; ++n) pTable[n]=NULL; };$/;"	f	struct:CMarkupSTL::SavedPosMap
+At	MarkupSTL.h	/^		NodePos& At( int n ) { return pN[n]; };$/;"	f	struct:CMarkupSTL::NodeStack
+AutoFlag	sh_common.h	/^    AutoFlag(T& ref) :referent_(ref)$/;"	f	class:share::AutoFlag
+AutoFlag	sh_common.h	/^class AutoFlag$/;"	c	namespace:share
+CCheckRunTime	sh_common.h	/^class CCheckRunTime : public noncopyable$/;"	c	namespace:share
+CMarkupSTL	MarkupSTL.h	/^	CMarkupSTL( const CMarkupSTL& markup ) { *this = markup; };$/;"	f	class:CMarkupSTL
+CMarkupSTL	MarkupSTL.h	/^	CMarkupSTL( const char* szDoc ) { SetDoc( szDoc ); InitDocFlags(); };$/;"	f	class:CMarkupSTL
+CMarkupSTL	MarkupSTL.h	/^	CMarkupSTL( int nFlags ) { SetDoc( NULL ); m_nFlags = nFlags; };$/;"	f	class:CMarkupSTL
+CMarkupSTL	MarkupSTL.h	/^	CMarkupSTL() { SetDoc( NULL ); InitDocFlags(); };$/;"	f	class:CMarkupSTL
+CMarkupSTL	MarkupSTL.h	/^class CMarkupSTL  $/;"	c
+CPlugMgr	gate_plug_manager.h	/^class CPlugMgr: public share::CSingleton<CPlugMgr>$/;"	c
+CSingleton	sh_common.h	/^    CSingleton(){}$/;"	f	class:share::CSingleton
+CSingleton	sh_common.h	/^class CSingleton : public noncopyable$/;"	c	namespace:share
+Clear	MarkupSTL.h	/^		void Clear() { nL=0; nR=-1; nNext=0; };$/;"	f	struct:CMarkupSTL::TokenPos
+Clear	MarkupSTL.h	/^		void Clear() { nSegs=0; nSize=0; pSegs=NULL; };$/;"	f	struct:CMarkupSTL::PosArray
+ClearVirtualParent	MarkupSTL.h	/^		void ClearVirtualParent() { memset(this,0,sizeof(ElemPos)); };$/;"	f	struct:CMarkupSTL::ElemPos
+ContentLen	MarkupSTL.h	/^		int ContentLen() const { return nLength - StartTagLen() - EndTagLen(); };$/;"	f	struct:CMarkupSTL::ElemPos
+Copy	MarkupSTL.h	/^		void Copy( NodePos* pNNew ) { for(int n=0;n<nSize;++n) pNNew[n]=pN[n]; if (pN) delete [] pN; pN=pNNew; };$/;"	f	struct:CMarkupSTL::NodeStack
+CreateInstance	sh_common.h	/^    static bool CreateInstance()$/;"	f	class:share::CSingleton
+DWORD	sh_type.h	/^typedef unsigned long		DWORD;$/;"	t
+DestroyInstance	sh_common.h	/^    static void DestroyInstance()$/;"	f	class:share::CSingleton
+EP_LEVMASK	MarkupSTL.h	/^		enum { EP_STBITS=22, EP_STMASK=0x2fffff, EP_LEVMASK=0xffff };$/;"	e	enum:CMarkupSTL::ElemPos::__anon1
+EP_STBITS	MarkupSTL.h	/^		enum { EP_STBITS=22, EP_STMASK=0x2fffff, EP_LEVMASK=0xffff };$/;"	e	enum:CMarkupSTL::ElemPos::__anon1
+EP_STMASK	MarkupSTL.h	/^		enum { EP_STBITS=22, EP_STMASK=0x2fffff, EP_LEVMASK=0xffff };$/;"	e	enum:CMarkupSTL::ElemPos::__anon1
+ElemPos	MarkupSTL.h	/^		ElemPos( const ElemPos& pos ) { *this = pos; };$/;"	f	struct:CMarkupSTL::ElemPos
+ElemPos	MarkupSTL.h	/^		ElemPos() {};$/;"	f	struct:CMarkupSTL::ElemPos
+ElemPos	MarkupSTL.h	/^	struct ElemPos$/;"	s	class:CMarkupSTL
+EndTagLen	MarkupSTL.h	/^		int EndTagLen() const { return (nTagLengths >> EP_STBITS); };$/;"	f	struct:CMarkupSTL::ElemPos
+FORMAT_I64	sh_define.h	46;"	d
+FORMAT_I64	sh_define.h	50;"	d
+FORMAT_U64	sh_define.h	47;"	d
+FORMAT_U64	sh_define.h	51;"	d
+FORMAT_X64	sh_define.h	48;"	d
+FORMAT_X64	sh_define.h	52;"	d
+G_STRID_FORMAT_BBBB	sh_common.h	/^    G_STRID_FORMAT_BBBB     =9,   \/\/"b-b-b-b"$/;"	e	enum:share::STR_ID_FORMAT_TYPE
+G_STRID_FORMAT_BBBBWW	sh_common.h	/^    G_STRID_FORMAT_BBBBWW   =6,   \/\/"b-b-b-b-w-w"$/;"	e	enum:share::STR_ID_FORMAT_TYPE
+G_STRID_FORMAT_BBW	sh_common.h	/^    G_STRID_FORMAT_BBW      =8,   \/\/"b-b-w"$/;"	e	enum:share::STR_ID_FORMAT_TYPE
+G_STRID_FORMAT_BBWD	sh_common.h	/^    G_STRID_FORMAT_BBWD     =3,   \/\/"b-b-w-d"$/;"	e	enum:share::STR_ID_FORMAT_TYPE
+G_STRID_FORMAT_BBWWW	sh_common.h	/^    G_STRID_FORMAT_BBWWW    =5,   \/\/"b-b-w-w-w"$/;"	e	enum:share::STR_ID_FORMAT_TYPE
+G_STRID_FORMAT_DD	sh_common.h	/^    G_STRID_FORMAT_DD       =1,   \/\/"d_d";$/;"	e	enum:share::STR_ID_FORMAT_TYPE
+G_STRID_FORMAT_WW	sh_common.h	/^    G_STRID_FORMAT_WW       =7,   \/\/"w-w"$/;"	e	enum:share::STR_ID_FORMAT_TYPE
+G_STRID_FORMAT_WWD	sh_common.h	/^    G_STRID_FORMAT_WWD      =2,   \/\/"w-w-d"$/;"	e	enum:share::STR_ID_FORMAT_TYPE
+G_STRID_FORMAT_WWWW	sh_common.h	/^    G_STRID_FORMAT_WWWW     =4,   \/\/"w-w-w-w"$/;"	e	enum:share::STR_ID_FORMAT_TYPE
+GetAttrib	MarkupSTL.h	/^	std::string GetAttrib( const char* szAttrib ) const { return x_GetAttrib(m_iPos,szAttrib); };$/;"	f	class:CMarkupSTL
+GetChildAttrib	MarkupSTL.h	/^	std::string GetChildAttrib( const char* szAttrib ) const { return x_GetAttrib(m_iPosChild,szAttrib); };$/;"	f	class:CMarkupSTL
+GetChildData	MarkupSTL.h	/^	std::string GetChildData() const { return x_GetData(m_iPosChild); };$/;"	f	class:CMarkupSTL
+GetChildSubDoc	MarkupSTL.h	/^	std::string GetChildSubDoc() const { return x_GetSubDoc(m_iPosChild); };$/;"	f	class:CMarkupSTL
+GetChildTagName	MarkupSTL.h	/^	std::string GetChildTagName() const { return x_GetTagName(m_iPosChild); };$/;"	f	class:CMarkupSTL
+GetData	MarkupSTL.h	/^	std::string GetData() const { return x_GetData(m_iPos); };$/;"	f	class:CMarkupSTL
+GetDoc	MarkupSTL.h	/^	const std::string& GetDoc() const { return m_strDoc; };$/;"	f	class:CMarkupSTL
+GetDocFlags	MarkupSTL.h	/^	int GetDocFlags() const { return m_nFlags; };$/;"	f	class:CMarkupSTL
+GetElemContent	MarkupSTL.h	/^	std::string GetElemContent() const { return x_GetElemContent(m_iPos); };$/;"	f	class:CMarkupSTL
+GetError	MarkupSTL.h	/^	const std::string& GetError() const { return m_strError; };$/;"	f	class:CMarkupSTL
+GetNodeType	MarkupSTL.h	/^	int GetNodeType() { return m_nNodeType; };$/;"	f	class:CMarkupSTL
+GetSize	MarkupSTL.h	/^		int GetSize() const { return nSize; };$/;"	f	struct:CMarkupSTL::PosArray
+GetSubDoc	MarkupSTL.h	/^	std::string GetSubDoc() const { return x_GetSubDoc(m_iPos); };$/;"	f	class:CMarkupSTL
+Hash	MarkupSTL.h	/^		int Hash( const char* szName ) { int n=0; while (*szName) n += *szName++; return n % SPM_SIZE; };$/;"	f	struct:CMarkupSTL::SavedPosMap
+INT	sh_type.h	/^typedef int                  INT, *PINT;$/;"	t
+INT16	sh_type.h	/^typedef signed short        INT16, *PINT16;$/;"	t
+INT32	sh_type.h	/^typedef signed int          INT32, *PINT32;$/;"	t
+INT64	sh_type.h	/^typedef long long           INT64, *PINT64;$/;"	t
+INT8	sh_type.h	/^typedef signed char         INT8, *PINT8;$/;"	t
+INVALID_SOCKET	sh_define.h	85;"	d
+InitDocFlags	MarkupSTL.h	/^	void InitDocFlags()$/;"	f	class:CMarkupSTL
+InsertChildElem	MarkupSTL.h	/^	bool InsertChildElem( const char* szName, const char* szData=NULL, int nFlags=0 ) { return x_AddElem(szName,szData,nFlags|MNF_INSERT|MNF_CHILD); };$/;"	f	class:CMarkupSTL
+InsertChildElem	MarkupSTL.h	/^	bool InsertChildElem( const char* szName, int nValue, int nFlags=0 ) { return x_AddElem(szName,nValue,nFlags|MNF_INSERT|MNF_CHILD); };$/;"	f	class:CMarkupSTL
+InsertChildSubDoc	MarkupSTL.h	/^	bool InsertChildSubDoc( const char* szSubDoc ) { return x_AddSubDoc(szSubDoc,MNF_CHILD|MNF_INSERT); };$/;"	f	class:CMarkupSTL
+InsertElem	MarkupSTL.h	/^	bool InsertElem( const char* szName, const char* szData=NULL, int nFlags=0 ) { return x_AddElem(szName,szData,nFlags|MNF_INSERT); };$/;"	f	class:CMarkupSTL
+InsertElem	MarkupSTL.h	/^	bool InsertElem( const char* szName, int nValue, int nFlags=0 ) { return x_AddElem(szName,nValue,nFlags|MNF_INSERT); };$/;"	f	class:CMarkupSTL
+InsertNode	MarkupSTL.h	/^	bool InsertNode( int nType, const char* szText ) { return x_AddNode(nType,szText,MNF_INSERT); };$/;"	f	class:CMarkupSTL
+InsertSubDoc	MarkupSTL.h	/^	bool InsertSubDoc( const char* szSubDoc ) { return x_AddSubDoc(szSubDoc,MNF_INSERT); };$/;"	f	class:CMarkupSTL
+Instance	sh_common.h	/^    inline static T& Instance()$/;"	f	class:share::CSingleton
+InstanceEx	sh_common.h	/^    inline static T& InstanceEx()$/;"	f	class:share::CSingleton
+IsEmptyElement	MarkupSTL.h	/^		bool IsEmptyElement() { return (StartTagLen()==nLength)?true:false; };$/;"	f	struct:CMarkupSTL::ElemPos
+LONG	sh_type.h	/^typedef long                 LONG, *PLONG;$/;"	t
+Length	MarkupSTL.h	/^		int Length() const { return nR - nL + 1; };$/;"	f	struct:CMarkupSTL::TokenPos
+Level	MarkupSTL.h	/^		int Level() const { return nFlags & EP_LEVMASK; };$/;"	f	struct:CMarkupSTL::ElemPos
+MARKUP_SETDEBUGSTATE	MarkupSTL.h	19;"	d
+MARKUP_SETDEBUGSTATE	MarkupSTL.h	21;"	d
+MAX_PATH	sh_define.h	74;"	d
+MDF_IGNORECASE	MarkupSTL.h	/^		MDF_IGNORECASE = 8,$/;"	e	enum:CMarkupSTL::MarkupDocFlags
+MNF_CHILD	MarkupSTL.h	/^		MNF_CHILD      = 0x004000,$/;"	e	enum:CMarkupSTL::MarkupNodeFlagsInternal
+MNF_DELETED	MarkupSTL.h	/^		MNF_DELETED    = 0x020000,$/;"	e	enum:CMarkupSTL::MarkupNodeFlagsInternal
+MNF_EMPTY	MarkupSTL.h	/^		MNF_EMPTY      = 0x010000,$/;"	e	enum:CMarkupSTL::MarkupNodeFlagsInternal
+MNF_ESCAPEQUOTES	MarkupSTL.h	/^		MNF_ESCAPEQUOTES  = 0x100,$/;"	e	enum:CMarkupSTL::MarkupNodeFlags
+MNF_FIRST	MarkupSTL.h	/^		MNF_FIRST      = 0x080000,$/;"	e	enum:CMarkupSTL::MarkupNodeFlagsInternal
+MNF_ILLDATA	MarkupSTL.h	/^		MNF_ILLDATA    = 0x200000,$/;"	e	enum:CMarkupSTL::MarkupNodeFlags
+MNF_ILLFORMED	MarkupSTL.h	/^		MNF_ILLFORMED  = 0x800000,$/;"	e	enum:CMarkupSTL::MarkupNodeFlagsInternal
+MNF_INSERT	MarkupSTL.h	/^		MNF_INSERT     = 0x002000,$/;"	e	enum:CMarkupSTL::MarkupNodeFlagsInternal
+MNF_NONENDED	MarkupSTL.h	/^		MNF_NONENDED   = 0x100000,$/;"	e	enum:CMarkupSTL::MarkupNodeFlags
+MNF_PUBLIC	MarkupSTL.h	/^		MNF_PUBLIC     = 0x300000,$/;"	e	enum:CMarkupSTL::MarkupNodeFlagsInternal
+MNF_QUOTED	MarkupSTL.h	/^		MNF_QUOTED     = 0x008000,$/;"	e	enum:CMarkupSTL::MarkupNodeFlagsInternal
+MNF_REPLACE	MarkupSTL.h	/^		MNF_REPLACE    = 0x001000,$/;"	e	enum:CMarkupSTL::MarkupNodeFlagsInternal
+MNF_WITHCDATA	MarkupSTL.h	/^		MNF_WITHCDATA      = 0x01,$/;"	e	enum:CMarkupSTL::MarkupNodeFlags
+MNF_WITHNOEND	MarkupSTL.h	/^		MNF_WITHNOEND      = 0x10,$/;"	e	enum:CMarkupSTL::MarkupNodeFlags
+MNF_WITHNOLINES	MarkupSTL.h	/^		MNF_WITHNOLINES    = 0x02,$/;"	e	enum:CMarkupSTL::MarkupNodeFlags
+MNF_WITHREFS	MarkupSTL.h	/^		MNF_WITHREFS       = 0x08,$/;"	e	enum:CMarkupSTL::MarkupNodeFlags
+MNF_WITHXHTMLSPACE	MarkupSTL.h	/^		MNF_WITHXHTMLSPACE = 0x04,$/;"	e	enum:CMarkupSTL::MarkupNodeFlags
+MNT_CDATA_SECTION	MarkupSTL.h	/^		MNT_CDATA_SECTION			= 8,  \/\/ 0x08$/;"	e	enum:CMarkupSTL::MarkupNodeType
+MNT_COMMENT	MarkupSTL.h	/^		MNT_COMMENT					= 32, \/\/ 0x20$/;"	e	enum:CMarkupSTL::MarkupNodeType
+MNT_DOCUMENT_TYPE	MarkupSTL.h	/^		MNT_DOCUMENT_TYPE			= 64, \/\/ 0x40$/;"	e	enum:CMarkupSTL::MarkupNodeType
+MNT_ELEMENT	MarkupSTL.h	/^		MNT_ELEMENT					= 1,  \/\/ 0x01$/;"	e	enum:CMarkupSTL::MarkupNodeType
+MNT_EXCLUDE_WHITESPACE	MarkupSTL.h	/^		MNT_EXCLUDE_WHITESPACE		= 123,\/\/ 0x7b$/;"	e	enum:CMarkupSTL::MarkupNodeType
+MNT_LONE_END_TAG	MarkupSTL.h	/^		MNT_LONE_END_TAG			= 128,\/\/ 0x80$/;"	e	enum:CMarkupSTL::MarkupNodeType
+MNT_NODE_ERROR	MarkupSTL.h	/^		MNT_NODE_ERROR              = 32768 \/\/ 0x8000$/;"	e	enum:CMarkupSTL::MarkupNodeType
+MNT_PROCESSING_INSTRUCTION	MarkupSTL.h	/^		MNT_PROCESSING_INSTRUCTION	= 16, \/\/ 0x10$/;"	e	enum:CMarkupSTL::MarkupNodeType
+MNT_TEXT	MarkupSTL.h	/^		MNT_TEXT					= 2,  \/\/ 0x02$/;"	e	enum:CMarkupSTL::MarkupNodeType
+MNT_WHITESPACE	MarkupSTL.h	/^		MNT_WHITESPACE				= 4,  \/\/ 0x04$/;"	e	enum:CMarkupSTL::MarkupNodeType
+MarkupDocFlags	MarkupSTL.h	/^	enum MarkupDocFlags$/;"	g	class:CMarkupSTL
+MarkupNodeFlags	MarkupSTL.h	/^	enum MarkupNodeFlags$/;"	g	class:CMarkupSTL
+MarkupNodeFlagsInternal	MarkupSTL.h	/^	enum MarkupNodeFlagsInternal$/;"	g	class:CMarkupSTL
+MarkupNodeType	MarkupSTL.h	/^	enum MarkupNodeType$/;"	g	class:CMarkupSTL
+Match	MarkupSTL.h	/^		bool Match( const char* szName )$/;"	f	struct:CMarkupSTL::TokenPos
+Match	MarkupSTL.h	/^		bool Match( const std::string& strName ) { return Match(strName.c_str()); };$/;"	f	struct:CMarkupSTL::TokenPos
+NULL	sh_define.h	25;"	d
+NULL	sh_define.h	27;"	d
+NodePos	MarkupSTL.h	/^		NodePos( int n ) { nFlags=n; nNodeType=0; nStart=0; nLength=0; };$/;"	f	struct:CMarkupSTL::NodePos
+NodePos	MarkupSTL.h	/^		NodePos() {};$/;"	f	struct:CMarkupSTL::NodePos
+NodePos	MarkupSTL.h	/^	struct NodePos$/;"	s	class:CMarkupSTL
+NodeStack	MarkupSTL.h	/^		NodeStack() { nTop=-1; nSize=0; pN=NULL; };$/;"	f	struct:CMarkupSTL::NodeStack
+NodeStack	MarkupSTL.h	/^	struct NodeStack$/;"	s	class:CMarkupSTL
+PA_SEGBITS	MarkupSTL.h	/^		enum { PA_SEGBITS = 16, PA_SEGMASK = 0xffff };$/;"	e	enum:CMarkupSTL::PosArray::__anon3
+PA_SEGMASK	MarkupSTL.h	/^		enum { PA_SEGBITS = 16, PA_SEGMASK = 0xffff };$/;"	e	enum:CMarkupSTL::PosArray::__anon3
+PINT	sh_type.h	/^typedef int                  INT, *PINT;$/;"	t
+PINT16	sh_type.h	/^typedef signed short        INT16, *PINT16;$/;"	t
+PINT32	sh_type.h	/^typedef signed int          INT32, *PINT32;$/;"	t
+PINT64	sh_type.h	/^typedef long long           INT64, *PINT64;$/;"	t
+PINT8	sh_type.h	/^typedef signed char         INT8, *PINT8;$/;"	t
+PLONG	sh_type.h	/^typedef long                 LONG, *PLONG;$/;"	t
+PTR_TYPE	sh_type.h	/^typedef void* PTR_TYPE;$/;"	t
+PUINT	sh_type.h	/^typedef unsigned int        UINT, *PUINT;$/;"	t
+PUINT16	sh_type.h	/^typedef unsigned short      UINT16, *PUINT16;$/;"	t
+PUINT32	sh_type.h	/^typedef unsigned int        UINT32, *PUINT32;$/;"	t
+PUINT64	sh_type.h	/^typedef unsigned long long  UINT64, *PUINT64;$/;"	t
+PUINT8	sh_type.h	/^typedef unsigned char       UINT8, *PUINT8;$/;"	t
+PULONG	sh_type.h	/^typedef unsigned long       ULONG, *PULONG;$/;"	t
+PosArray	MarkupSTL.h	/^		PosArray() { Clear(); };$/;"	f	struct:CMarkupSTL::PosArray
+PosArray	MarkupSTL.h	/^	struct PosArray$/;"	s	class:CMarkupSTL
+Release	MarkupSTL.h	/^		void Release() { for (int n=0;n<SPM_SIZE;++n) if (pTable[n]) delete[] pTable[n]; delete[] pTable; };$/;"	f	struct:CMarkupSTL::SavedPosMap
+Release	MarkupSTL.h	/^		void Release() { for (int n=0;n<SegsUsed();++n) delete[] (char*)pSegs[n]; if (pSegs) delete[] (char*)pSegs; };$/;"	f	struct:CMarkupSTL::PosArray
+Remove	MarkupSTL.h	/^		void Remove() { --nTop; };$/;"	f	struct:CMarkupSTL::NodeStack
+RemoveAll	MarkupSTL.h	/^		void RemoveAll() { Release(); Clear(); };$/;"	f	struct:CMarkupSTL::PosArray
+RemoveAll	MarkupSTL.h	/^		void RemoveAll() { if (pTable) Release(); pTable=NULL; };$/;"	f	struct:CMarkupSTL::SavedPosMap
+ResetChildPos	MarkupSTL.h	/^	void ResetChildPos() { x_SetPos(m_iPosParent,m_iPos,0); };$/;"	f	class:CMarkupSTL
+ResetMainPos	MarkupSTL.h	/^	void ResetMainPos() { x_SetPos(m_iPosParent,0,0); };$/;"	f	class:CMarkupSTL
+ResetPos	MarkupSTL.h	/^	void ResetPos() { x_SetPos(0,0,0); };$/;"	f	class:CMarkupSTL
+SHARED_API	sh_define.h	36;"	d
+SHARED_API	sh_define.h	38;"	d
+SOCKET	sh_define.h	84;"	d
+SOCKET_ERROR	sh_define.h	86;"	d
+SPM_CHILD	MarkupSTL.h	/^		enum { SPM_SIZE = 7, SPM_MAIN = 1, SPM_CHILD = 2, SPM_USED = 4, SPM_LAST = 8 };$/;"	e	enum:CMarkupSTL::SavedPosMap::__anon2
+SPM_LAST	MarkupSTL.h	/^		enum { SPM_SIZE = 7, SPM_MAIN = 1, SPM_CHILD = 2, SPM_USED = 4, SPM_LAST = 8 };$/;"	e	enum:CMarkupSTL::SavedPosMap::__anon2
+SPM_MAIN	MarkupSTL.h	/^		enum { SPM_SIZE = 7, SPM_MAIN = 1, SPM_CHILD = 2, SPM_USED = 4, SPM_LAST = 8 };$/;"	e	enum:CMarkupSTL::SavedPosMap::__anon2
+SPM_SIZE	MarkupSTL.h	/^		enum { SPM_SIZE = 7, SPM_MAIN = 1, SPM_CHILD = 2, SPM_USED = 4, SPM_LAST = 8 };$/;"	e	enum:CMarkupSTL::SavedPosMap::__anon2
+SPM_USED	MarkupSTL.h	/^		enum { SPM_SIZE = 7, SPM_MAIN = 1, SPM_CHILD = 2, SPM_USED = 4, SPM_LAST = 8 };$/;"	e	enum:CMarkupSTL::SavedPosMap::__anon2
+STATIC_CHECK	sh_common.h	/^template<>     struct STATIC_CHECK<true>{};$/;"	s	namespace:share
+STR_ID_FORMAT_TYPE	sh_common.h	/^enum STR_ID_FORMAT_TYPE$/;"	g	namespace:share
+SafeSprintf	sh_common.h	/^inline INT SafeSprintf(char (&Destination)[bufLen], const char *format, ...)$/;"	f	namespace:share
+SavedPos	MarkupSTL.h	/^		SavedPos() { nSavedPosFlags=0; iPos=0; };$/;"	f	struct:CMarkupSTL::SavedPos
+SavedPos	MarkupSTL.h	/^	struct SavedPos$/;"	s	class:CMarkupSTL
+SavedPosMap	MarkupSTL.h	/^		SavedPosMap() { pTable = NULL; };$/;"	f	struct:CMarkupSTL::SavedPosMap
+SavedPosMap	MarkupSTL.h	/^	struct SavedPosMap$/;"	s	class:CMarkupSTL
+SegsUsed	MarkupSTL.h	/^		int SegsUsed() const { return ((nSize-1)>>PA_SEGBITS) + 1; };$/;"	f	struct:CMarkupSTL::PosArray
+SetAttrib	MarkupSTL.h	/^	bool SetAttrib( const char* szAttrib, const char* szValue ) { return x_SetAttrib(m_iPos,szAttrib,szValue); };$/;"	f	class:CMarkupSTL
+SetAttrib	MarkupSTL.h	/^	bool SetAttrib( const char* szAttrib, int nValue ) { return x_SetAttrib(m_iPos,szAttrib,nValue); };$/;"	f	class:CMarkupSTL
+SetChildAttrib	MarkupSTL.h	/^	bool SetChildAttrib( const char* szAttrib, const char* szValue ) { return x_SetAttrib(m_iPosChild,szAttrib,szValue); };$/;"	f	class:CMarkupSTL
+SetChildAttrib	MarkupSTL.h	/^	bool SetChildAttrib( const char* szAttrib, int nValue ) { return x_SetAttrib(m_iPosChild,szAttrib,nValue); };$/;"	f	class:CMarkupSTL
+SetChildData	MarkupSTL.h	/^	bool SetChildData( const char* szData, int nFlags=0 ) { return x_SetData(m_iPosChild,szData,nFlags); };$/;"	f	class:CMarkupSTL
+SetChildData	MarkupSTL.h	/^	bool SetChildData( int nValue ) { return x_SetData(m_iPosChild,nValue); };$/;"	f	class:CMarkupSTL
+SetData	MarkupSTL.h	/^	bool SetData( const char* szData, int nFlags=0 ) { return x_SetData(m_iPos,szData,nFlags); };$/;"	f	class:CMarkupSTL
+SetData	MarkupSTL.h	/^	bool SetData( int nValue ) { return x_SetData(m_iPos,nValue); };$/;"	f	class:CMarkupSTL
+SetDocFlags	MarkupSTL.h	/^	void SetDocFlags( int nFlags ) { m_nFlags = nFlags; };$/;"	f	class:CMarkupSTL
+SetElemContent	MarkupSTL.h	/^	bool SetElemContent( const char* szContent ) { return x_SetElemContent(szContent); };$/;"	f	class:CMarkupSTL
+SetEndTagLen	MarkupSTL.h	/^		void SetEndTagLen( int n ) { nTagLengths = (nTagLengths & EP_STMASK) + (n << EP_STBITS); };$/;"	f	struct:CMarkupSTL::ElemPos
+SetLevel	MarkupSTL.h	/^		void SetLevel( int nLev ) { nFlags = (nFlags & ~EP_LEVMASK) | nLev; };$/;"	f	struct:CMarkupSTL::ElemPos
+SetStartTagLen	MarkupSTL.h	/^		void SetStartTagLen( int n ) { nTagLengths = (nTagLengths & ~EP_STMASK) + n; };$/;"	f	struct:CMarkupSTL::ElemPos
+StartAfter	MarkupSTL.h	/^		int StartAfter() const { return nStart + nLength; };$/;"	f	struct:CMarkupSTL::ElemPos
+StartContent	MarkupSTL.h	/^		int StartContent() const { return nStart + StartTagLen(); };$/;"	f	struct:CMarkupSTL::ElemPos
+StartTagLen	MarkupSTL.h	/^		int StartTagLen() const { return (nTagLengths & EP_STMASK); };$/;"	f	struct:CMarkupSTL::ElemPos
+TokenPos	MarkupSTL.h	/^		TokenPos( const char* sz, int n ) { Clear(); szDoc=sz; nTokenFlags=n; };$/;"	f	struct:CMarkupSTL::TokenPos
+TokenPos	MarkupSTL.h	/^		TokenPos( const std::string& str, int n ) { Clear(); szDoc=str.c_str(); nTokenFlags=n; };$/;"	f	struct:CMarkupSTL::TokenPos
+TokenPos	MarkupSTL.h	/^	struct TokenPos$/;"	s	class:CMarkupSTL
+Top	MarkupSTL.h	/^		NodePos& Top() { return pN[nTop]; };$/;"	f	struct:CMarkupSTL::NodeStack
+TopIndex	MarkupSTL.h	/^		int TopIndex() { return nTop; };$/;"	f	struct:CMarkupSTL::NodeStack
+UINT	sh_type.h	/^typedef unsigned int        UINT, *PUINT;$/;"	t
+UINT16	sh_type.h	/^typedef unsigned short      UINT16, *PUINT16;$/;"	t
+UINT32	sh_type.h	/^typedef unsigned int        UINT32, *PUINT32;$/;"	t
+UINT64	sh_type.h	/^typedef unsigned long long  UINT64, *PUINT64;$/;"	t
+UINT8	sh_type.h	/^typedef unsigned char       UINT8, *PUINT8;$/;"	t
+ULONG	sh_type.h	/^typedef unsigned long       ULONG, *PULONG;$/;"	t
+ZeroMemory	sh_define.h	87;"	d
+_DS	MarkupSTL.h	18;"	d
+__GATE_PLUG_MANAGER_H__	gate_plug_manager.h	2;"	d
+__SHARE_COMMON_H__	sh_common.h	2;"	d
+__SHARE_DEFINE_H__	sh_define.h	2;"	d
+__SHARE_INCLUDE_H__	sh_include.h	2;"	d
+__SHARE_TYPE_H__	sh_type.h	2;"	d
+a2i	sh_common.h	/^inline INT a2i(const char* pStr)$/;"	f	namespace:share
+a2i	sh_common.h	/^inline INT a2i(const std::string& s)$/;"	f	namespace:share
+a2i64	sh_common.h	/^inline INT64 a2i64(const char* pStr)$/;"	f	namespace:share
+a2i64	sh_common.h	/^inline INT64 a2i64(const std::string& s)$/;"	f	namespace:share
+a2l	sh_common.h	/^inline LONG a2l(const char* pStr)$/;"	f	namespace:share
+a2l	sh_common.h	/^inline LONG a2l(const std::string& s)$/;"	f	namespace:share
+i2a	sh_common.h	/^inline INT  i2a(char (&buf)[bufLen],INT nNum)$/;"	f	namespace:share
+i2a64	sh_common.h	/^inline INT  i2a64(char (&buf)[bufLen], INT64 qNum)$/;"	f	namespace:share
+iElemChild	MarkupSTL.h	/^		int iElemChild; \/\/ first child$/;"	m	struct:CMarkupSTL::ElemPos
+iElemNext	MarkupSTL.h	/^		int iElemNext;$/;"	m	struct:CMarkupSTL::ElemPos
+iElemParent	MarkupSTL.h	/^		int iElemParent;$/;"	m	struct:CMarkupSTL::ElemPos
+iElemPrev	MarkupSTL.h	/^		int iElemPrev; \/\/ if this is first child, iElemPrev points to last$/;"	m	struct:CMarkupSTL::ElemPos
+iPos	MarkupSTL.h	/^		int iPos;$/;"	m	struct:CMarkupSTL::SavedPos
+m_aPos	MarkupSTL.h	/^	PosArray m_aPos;$/;"	m	class:CMarkupSTL
+m_dwBeginTick	sh_common.h	/^    ULONG          m_dwBeginTick;$/;"	m	class:share::CCheckRunTime
+m_dwLimitTick	sh_common.h	/^    ULONG          m_dwLimitTick;$/;"	m	class:share::CCheckRunTime
+m_iPos	MarkupSTL.h	/^	int m_iPos;$/;"	m	class:CMarkupSTL
+m_iPosChild	MarkupSTL.h	/^	int m_iPosChild;$/;"	m	class:CMarkupSTL
+m_iPosDeleted	MarkupSTL.h	/^	int m_iPosDeleted;$/;"	m	class:CMarkupSTL
+m_iPosFree	MarkupSTL.h	/^	int m_iPosFree;$/;"	m	class:CMarkupSTL
+m_iPosParent	MarkupSTL.h	/^	int m_iPosParent;$/;"	m	class:CMarkupSTL
+m_instance	sh_common.h	/^    static T* m_instance;$/;"	m	class:share::CSingleton
+m_instance	sh_common.h	/^template<class T> T* CSingleton<T>::m_instance = NULL;$/;"	m	class:share::CSingleton
+m_mapSavedPos	MarkupSTL.h	/^	SavedPosMap m_mapSavedPos;$/;"	m	class:CMarkupSTL
+m_nFlags	MarkupSTL.h	/^	int m_nFlags;$/;"	m	class:CMarkupSTL
+m_nNodeLength	MarkupSTL.h	/^	int m_nNodeLength;$/;"	m	class:CMarkupSTL
+m_nNodeOffset	MarkupSTL.h	/^	int m_nNodeOffset;$/;"	m	class:CMarkupSTL
+m_nNodeType	MarkupSTL.h	/^	int m_nNodeType;$/;"	m	class:CMarkupSTL
+m_pChildDS	MarkupSTL.h	/^	const char* m_pChildDS;$/;"	m	class:CMarkupSTL
+m_pMainDS	MarkupSTL.h	/^	const char* m_pMainDS;$/;"	m	class:CMarkupSTL
+m_pszModuleName	sh_common.h	/^    const char*     m_pszModuleName;$/;"	m	class:share::CCheckRunTime
+m_strDoc	MarkupSTL.h	/^	std::string m_strDoc;$/;"	m	class:CMarkupSTL
+m_strError	MarkupSTL.h	/^	std::string m_strError;$/;"	m	class:CMarkupSTL
+max	sh_define.h	9;"	d
+min	sh_define.h	10;"	d
+nFlags	MarkupSTL.h	/^		int nFlags; \/\/ 16 bits flags, 16 bits level 65536 depth limit$/;"	m	struct:CMarkupSTL::ElemPos
+nFlags	MarkupSTL.h	/^		int nFlags;$/;"	m	struct:CMarkupSTL::NodePos
+nL	MarkupSTL.h	/^		int nL;$/;"	m	struct:CMarkupSTL::TokenPos
+nLength	MarkupSTL.h	/^		int nLength;$/;"	m	struct:CMarkupSTL::ElemPos
+nLength	MarkupSTL.h	/^		int nLength;$/;"	m	struct:CMarkupSTL::NodePos
+nNext	MarkupSTL.h	/^		int nNext;$/;"	m	struct:CMarkupSTL::TokenPos
+nNodeType	MarkupSTL.h	/^		int nNodeType;$/;"	m	struct:CMarkupSTL::NodePos
+nPreSpaceLength	MarkupSTL.h	/^		int nPreSpaceLength;$/;"	m	struct:CMarkupSTL::TokenPos
+nPreSpaceStart	MarkupSTL.h	/^		int nPreSpaceStart;$/;"	m	struct:CMarkupSTL::TokenPos
+nR	MarkupSTL.h	/^		int nR;$/;"	m	struct:CMarkupSTL::TokenPos
+nSavedPosFlags	MarkupSTL.h	/^		int nSavedPosFlags;$/;"	m	struct:CMarkupSTL::SavedPos
+nSegs	MarkupSTL.h	/^		int nSegs;$/;"	m	struct:CMarkupSTL::PosArray
+nSize	MarkupSTL.h	/^		int nSize;$/;"	m	struct:CMarkupSTL::NodeStack
+nSize	MarkupSTL.h	/^		int nSize;$/;"	m	struct:CMarkupSTL::PosArray
+nStart	MarkupSTL.h	/^		int nStart;$/;"	m	struct:CMarkupSTL::ElemPos
+nStart	MarkupSTL.h	/^		int nStart;$/;"	m	struct:CMarkupSTL::NodePos
+nTagLengths	MarkupSTL.h	/^		int nTagLengths; \/\/ 22 bits 4MB limit for start tag, 10 bits 1K limit for end tag$/;"	m	struct:CMarkupSTL::ElemPos
+nTokenFlags	MarkupSTL.h	/^		int nTokenFlags;$/;"	m	struct:CMarkupSTL::TokenPos
+nTop	MarkupSTL.h	/^		int nTop;$/;"	m	struct:CMarkupSTL::NodeStack
+noncopyable	sh_common.h	/^    noncopyable() {}$/;"	f	class:share::noncopyable
+noncopyable	sh_common.h	/^class noncopyable$/;"	c	namespace:share
+operator []	MarkupSTL.h	/^		ElemPos& operator[](int n) const { return pSegs[n>>PA_SEGBITS][n&PA_SEGMASK]; };$/;"	f	struct:CMarkupSTL::PosArray
+pN	MarkupSTL.h	/^		NodePos* pN;$/;"	m	struct:CMarkupSTL::NodeStack
+pSegs	MarkupSTL.h	/^		ElemPos** pSegs;$/;"	m	struct:CMarkupSTL::PosArray
+pTable	MarkupSTL.h	/^		SavedPos** pTable;$/;"	m	struct:CMarkupSTL::SavedPosMap
+referent_	sh_common.h	/^    T& referent_;$/;"	m	class:share::AutoFlag
+share	sh_common.h	/^namespace share$/;"	n
+snprintf	sh_define.h	62;"	d
+snprintf	sh_define.h	65;"	d
+str2d	sh_common.h	/^inline double str2d(const char *nptr, char **endptr)$/;"	f	namespace:share
+strMeta	MarkupSTL.h	/^		std::string strMeta;$/;"	m	struct:CMarkupSTL::NodePos
+strName	MarkupSTL.h	/^		std::string strName;$/;"	m	struct:CMarkupSTL::SavedPos
+stricmp	sh_common.h	/^inline INT stricmp(const char *s1, const char *s2)$/;"	f	namespace:share
+strnicmp	MarkupSTL.h	25;"	d
+swprintf	sh_define.h	63;"	d
+swprintf	sh_define.h	66;"	d
+szDoc	MarkupSTL.h	/^		const char* szDoc;$/;"	m	struct:CMarkupSTL::TokenPos
+u2a	sh_common.h	/^inline INT  u2a(char (&buf)[bufLen],UINT dwNum)$/;"	f	namespace:share
+u2a64	sh_common.h	/^inline INT  u2a64(char (&buf)[bufLen], UINT64 dqNum)$/;"	f	namespace:share
+x_GetFreePos	MarkupSTL.h	/^	int x_GetFreePos()$/;"	f	class:CMarkupSTL
+x_SetPos	MarkupSTL.h	/^	void x_SetPos( int iPosParent, int iPos, int iPosChild )$/;"	f	class:CMarkupSTL
+~AutoFlag	sh_common.h	/^    ~AutoFlag()$/;"	f	class:share::AutoFlag
+~CMarkupSTL	MarkupSTL.h	/^	~CMarkupSTL() {};$/;"	f	class:CMarkupSTL
+~NodeStack	MarkupSTL.h	/^		~NodeStack() { if (pN) delete [] pN; };$/;"	f	struct:CMarkupSTL::NodeStack
+~PosArray	MarkupSTL.h	/^		~PosArray() { Release(); };$/;"	f	struct:CMarkupSTL::PosArray
+~SavedPosMap	MarkupSTL.h	/^		~SavedPosMap() { RemoveAll(); };$/;"	f	struct:CMarkupSTL::SavedPosMap
+~noncopyable	sh_common.h	/^    ~noncopyable() {}$/;"	f	class:share::noncopyable
