@@ -1,0 +1,41 @@
+<root>
+	<!--
+	日志类型对应的日志目录，日志文件名称头和尾
+	每类日志对应的记录级别
+	日志类型id，最好按照从小到大往下派。[0-65535]。不能有重复
+	日志名称name 也不能有重复
+	-->
+	<logtype>
+		<type id="0" name="ShareLog"    folder_name="ShareLog"   log_file_head="share"  log_file_trail=".log">
+            <item key="debug" value="yes" />
+			<item key="info"  value="yes" />
+			<item key="warn"  value="yes" />
+			<item key="error" value="yes" />
+			<item key="fatal" value="yes" />
+		</type>
+		
+		<type id="1" name="UserLog"     folder_name="UserLog"    log_file_head="user"   log_file_trail=".log">
+			<item key="debug" value="yes" />
+			<item key="info"  value="yes" />
+			<item key="warn"  value="yes" />
+			<item key="error" value="yes" />
+			<item key="fatal" value="yes" />
+		</type>
+		
+		<type id="2" name="MemoryLog"     folder_name="MemoryLog"    log_file_head="memory"   log_file_trail=".log">
+			<item key="debug" value="yes" />
+			<item key="info"  value="yes" />
+			<item key="warn"  value="yes" />
+			<item key="error" value="yes" />
+			<item key="fatal" value="yes" />
+		</type>
+		
+		<type id="3" name="SqlLog"     folder_name="SqlLog"    log_file_head="sql"   log_file_trail=".log">
+			<item key="debug" value="no" />
+			<item key="info"  value="yes" />
+			<item key="warn"  value="yes" />
+			<item key="error" value="yes" />
+			<item key="fatal" value="yes" />
+		</type>
+	</logtype>
+</root>
