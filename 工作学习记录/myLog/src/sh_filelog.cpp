@@ -33,15 +33,41 @@ SHARE_FILE_LOG_HANDLE ShareFileLogCheckLog(const unsigned int nLogTypeIndex, con
         return NULL;
     }
     //获取日志对象map
-    const np_log_config_mgr::mapLogObject& logObjects = np_log_config_mgr::Clog_config_mgr::Instance().getLogObjects();
+    np_log_config_mgr::mapLogObject& logObjects = np_log_config_mgr::Clog_config_mgr::Instance().getLogObjects();
     if (logObjects.size() <= 0) {
         return NULL;
     }
-    np_log_config_mgr::mapLogObject::const_iterator it_logObjects = logObjects.find(nLogTypeIndex);
+    np_log_config_mgr::mapLogObject::iterator it_logObjects = logObjects.find(nLogTypeIndex);
     if (logObjects.end() == it_logObjects) {
         return NULL;
     }
+    //判断是否是同一天
+    UINT64 now_t = (UINT64)time(NULL);
+    if (!np_log_config_mgr::Clog_config_mgr::Instance().isOnSameDay(it_logObjects->second->GetGenerateTime(),now_t)) {
+        //不在同一天
+        //得到新的日志路径
+        const np_log_config_mgr::mapLogConfigStruct& logConfigs = np_log_config_mgr::Clog_config_mgr::Instance().getLogConfigs();
+        if (logConfigs.size() <= 0) {
+            return NULL;
+        }
+        np_log_config_mgr::mapLogConfigStruct::const_iterator it_logConfigs = logConfigs.find(nLogTypeIndex);
+        if (logConfigs.end() == it_logConfigs) {
+            return NULL;
+        }
+        std::string newLogFilePath = np_log_config_mgr::Clog_config_mgr::Instance().getLogFilePath(it_logConfigs->second.folder_name,it_logConfigs->second.log_head,it_logConfigs->second.log_tail);
+        //重新分配新的日志对象
+        Csh_log_object* pLogObject = np_log_config_mgr::Clog_config_mgr::Instance().generateLogObjectByPath(newLogFilePath);
+        if (pLogObject == NULL) {
+            std::cerr<<"new Csh_log_object error in ShareFileLogCheckLog"<<std::endl;
+            return NULL;
+        }
+        //替换原来的日志对象
+        delete it_logObjects->second;
+        it_logObjects->second = pLogObject;             
+    }
+    
     return (SHARE_FILE_LOG_HANDLE)it_logObjects->second;
+
 }
 
 //写文本日志
@@ -50,9 +76,8 @@ void ShareFileLog(SHARE_FILE_LOG_HANDLE hLog, const char* lpcszLog)
     if (hLog != NULL) {
         Csh_log_object *pLog = (Csh_log_object *)hLog;
         std::ostringstream oss;
-        oss<<"["<<np_log_config_mgr::Clog_config_mgr::Instance().getCurDateTime("%H:%M:%S")<<"]";
+        oss<<"["<<np_log_config_mgr::Clog_config_mgr::Instance().getCurDateTime("%H:%M:%S")<<"]"<<lpcszLog;
         pLog->RecordLog(oss.str().c_str());
-        pLog->RecordLog(lpcszLog);
     }
 }
 

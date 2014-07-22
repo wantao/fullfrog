@@ -40,8 +40,11 @@ namespace np_log_config_mgr{
         bool createFile(const std::string& logFilePath);
         std::string getCurDateTime(const char* format);
         std::string getLogFilePath(const std::string& folderName,const std::string& logHead,const std::string& logTail);
-        const mapLogObject& getLogObjects();
+        mapLogObject& getLogObjects();
+        const mapLogConfigStruct& getLogConfigs();
         const mapNameLogTypeStruct& getNameLogTypes();
+        bool isOnSameDay(UINT64 pre_t,UINT64 now_t);
+        Csh_log_object* generateLogObjectByPath(std::string& logFilePath);
     protected:
     private:
          mapLogObject m_LogObjects;

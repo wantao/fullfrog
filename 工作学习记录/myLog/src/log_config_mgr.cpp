@@ -17,7 +17,16 @@ namespace np_log_config_mgr {
     }
     Clog_config_mgr::~Clog_config_mgr()
     {
-
+        if (m_LogObjects.size() > 0) {
+            mapLogObject::iterator it_logObject = m_LogObjects.begin();
+            for (; it_logObject != m_LogObjects.end(); it_logObject++) {
+                if (it_logObject->second != NULL) {
+                    delete it_logObject->second;
+                    it_logObject->second = NULL;
+                }
+            }
+            m_LogObjects.clear();
+        }
     }
 
     void Clog_config_mgr::Init()
@@ -122,7 +131,7 @@ namespace np_log_config_mgr {
                 std::cerr<<"createFile failure"<<std::endl;
                 assert(false);    
             }
-            Csh_log_object* pLogObject = new Csh_log_object(logFilePath);
+            Csh_log_object* pLogObject = generateLogObjectByPath(logFilePath);
             if (pLogObject == NULL) {
                 std::cerr<<"new Csh_log_object error"<<std::endl;
                 assert(false);
@@ -208,14 +217,36 @@ namespace np_log_config_mgr {
         return datetime_str;
     }
 
-    const mapLogObject& Clog_config_mgr::getLogObjects()
+    mapLogObject& Clog_config_mgr::getLogObjects()
     {
         return m_LogObjects;
+    }
+
+    const mapLogConfigStruct& Clog_config_mgr::getLogConfigs()
+    {
+        return m_LogConfigs;
     }
 
     const mapNameLogTypeStruct& Clog_config_mgr::getNameLogTypes()
     {
         return m_NameLogTypes;
+    }
+
+    bool Clog_config_mgr::isOnSameDay(UINT64 pre_t,UINT64 now_t) 
+    {
+        if (pre_t/86400 == now_t/86400) {
+            return true;
+        }
+        return false;
+    }
+
+    Csh_log_object* Clog_config_mgr::generateLogObjectByPath(std::string& logFilePath)
+    {
+        Csh_log_object* pLogObject = new Csh_log_object(logFilePath);
+        if (pLogObject == NULL) {
+            std::cerr<<"new Csh_log_object error in generateLogObjectByPath"<<std::endl;
+        }
+        return pLogObject;
     }
 };
 
