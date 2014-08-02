@@ -1,0 +1,3 @@
+protoc.exe -I=./ --cpp_out=./ error_code.proto extend_data.proto gameserver_dbserver.proto gameserver_gate.proto gameserver_gate_client.proto gameserver_gate_client_1.proto global_variable.proto login.dbserver.proto loginclient.proto ns.db.proto options.proto protocol_id.proto ProtocType.proto table_config.proto trs_client.proto serverInternal.proto
+protoc.exe -I=./ --python_out=./ python_gameserver_gate_client.proto python_ProtocType.proto error_code.proto
+pause

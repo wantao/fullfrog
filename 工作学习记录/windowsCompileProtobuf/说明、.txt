@@ -1,0 +1,344 @@
+Type Meaning Used For 
+0 Varint int32, int64, uint32, uint64, sint32, sint64, bool, enum 
+
+1 64-bit fixed64, sfixed64, double 
+
+2 Length-delimited string, bytes, embedded messages, packed repeated fields 
+
+3 Start group groups (deprecated) 
+
+4 End group groups (deprecated) 
+
+5 32-bit fixed32, sfixed32, float 
+
+
+
+Specifying Field Rules
+You specify that message fields are one of the following:
+
+?required: a well-formed message must have exactly one of this field.
+?optional: a well-formed message can have zero or one of this field (but not more than one).
+?repeated: this field can be repeated any number of times (including zero) in a well-formed message. The order of the repeated values will be preserved.
+For historical reasons, repeated fields of basic numeric types aren't encoded as efficiently as they could be. New code should use the special option [packed=true] to get a more efficient encoding. For example: 
+
+repeated int32 samples = 4 [packed=true];
+
+
+Scalar Value Types
+A scalar message field can have one of the following types – the table shows the type specified in the .proto file, and the corresponding type in the automatically generated class: 
+
+.proto Type Notes C++ Type Java Type 
+double  double double 
+float  float float 
+int32 Uses variable-length encoding. Inefficient for encoding negative numbers – if your field is likely to have negative values, use sint32 instead. int32 int 
+int64 Uses variable-length encoding. Inefficient for encoding negative numbers – if your field is likely to have negative values, use sint64 instead. int64 long 
+uint32 Uses variable-length encoding. uint32 int[1] 
+uint64 Uses variable-length encoding. uint64 long[1] 
+sint32 Uses variable-length encoding. Signed int value. These more efficiently encode negative numbers than regular int32s. int32 int 
+sint64 Uses variable-length encoding. Signed int value. These more efficiently encode negative numbers than regular int64s. int64 long 
+fixed32 Always four bytes. More efficient than uint32 if values are often greater than 228. uint32 int[1] 
+fixed64 Always eight bytes. More efficient than uint64 if values are often greater than 256. uint64 long[1] 
+sfixed32 Always four bytes. int32 int 
+sfixed64 Always eight bytes. int64 long 
+bool  bool boolean 
+string A string must always contain UTF-8 encoded or 7-bit ASCII text. string String 
+bytes May contain any arbitrary sequence of bytes. string ByteString 
+
+
+Where to Find the Example Code 在哪可以找到示例代码
+
+
+The example code is included in the source code package, under the "examples" directory. Download it here.
+
+示例代码包含在源代码包中的“examples”目录下。点击此处下载。
+
+Defining Your Protocol Format 定义你自己的协议格式
+
+
+To create your address book application, you'll need to start with a .proto file. The definitions in a .proto file are simple: you add a message for each data structure you want to serialize, then specify a name and a type for each field in the message. Here is the .proto file that defines your messages, addressbook.proto.
+
+要创建你的地址薄应用程序，你需要从编写一个.proto文件开始。.proto文件的定义是比较简单的：为每一个你需要序列化的数据结构添加一个消息（message），然后为消息（message）中的每一个字段（field）指定一个名字和一个类型。下面就是一个定义你的多个消息（messages）的文件addressbook.proto：
+
+package tutorial;
+
+ 
+
+message Person {
+
+  required string name = 1;
+
+  required int32 id = 2;
+
+  optional string email = 3;
+
+ 
+
+  enum PhoneType {
+
+    MOBILE = 0;
+
+    HOME = 1;
+
+    WORK = 2;
+
+  }
+
+ 
+
+  message PhoneNumber {
+
+    required string number = 1;
+
+    optional PhoneType type = 2 [default = HOME];
+
+  }
+
+ 
+
+  repeated PhoneNumber phone = 4;
+
+}
+
+ 
+
+message AddressBook {
+
+  repeated Person person = 1;
+
+}
+
+
+As you can see, the syntax is similar to C++ or Java. Let's go through each part of the file and see what it does.
+
+正如你所看到的一样，该语法类似于C++或Java的语法。让我们依次来看看文件的每一部分的作用。
+
+ The .proto file starts with a package declaration, which helps to prevent naming conflicts between different projects. In C++, your generated classes will be placed in a namespace matching the package name.
+
+
+.proto文件以一个package声明开始。这个声明是为了防止不同项目之间的命名冲突。对应到C++中去，你用这个.proto文件生成的类将被放置在一个与package名相同的命名空间中。
+
+文章来源：http://www.codelast.com/
+
+
+Next, you have your message definitions. A message is just an aggregate containing a set of typed fields. Many standard simple data types are available as field types, including bool, int32, float, double, and string. You can also add further structure to your messages by using other message types as field types – in the above example the Person message contains PhoneNumber messages, while the AddressBook message contains Person messages. You can even define message types nested inside other messages – as you can see, the PhoneNumber type is defined inside Person. You can also define enum types if you want one of your fields to have one of a predefined list of values – here you want to specify that a phone number can be one of MOBILE, HOME, or WORK.
+
+
+再往下看，就是若干消息（message）定义了。一个消息就是某些类型的字段的集合。许多标准的、简单的数据类型都可以用作字段类型，包括bool，int32，float，double，以及string。你也可以使用其他的消息（message）类型来作为你的字段类型——在上面的例子中，消息Person就是一个被用作字段类型的例子。
+
+ 
+
+The " = 1", " = 2" markers on each element identify the unique "tag" that field uses in the binary encoding. Tag numbers 1-15 require one less byte to encode than higher numbers, so as an optimization you can decide to use those tags for the commonly used or repeated elements, leaving tags 16 and higher for less-commonly used optional elements. Each element in a repeated field requires re-encoding the tag number, so repeated fields are particularly good candidates for this optimization.
+
+在每一项后面的、类似于“= 1”，“= 2”的标志指出了该字段在二进制编码中使用的唯一“标识（tag）”。标识号1~15编码所需的字节数比更大的标识号使用的字节数要少1个，所以，如果你想寻求优化，可以为经常使用或者重复的项采用1~15的标识（tag），其他经常使用的optional项采用≥16的标识（tag）。在重复的字段中，每一项都要求重编码标识号（tag number），所以重复的字段特别适用于这种优化情况。
+
+ Each field must be annotated with one of the following modifiers:
+
+
+·         required: a value for the field must be provided, otherwise the message will be considered "uninitialized". If libprotobuf is compiled in debug mode, serializing an uninitialized message will cause an assertion failure. In optimized builds, the check is skipped and the message will be written anyway. However, parsing an uninitialized message will always fail (by returning false from the parse method). Other than this, a required field behaves exactly like an optional field.
+
+·         optional: the field may or may not be set. If an optional field value isn't set, a default value is used. For simple types, you can specify your own default value, as we've done for the phone number type in the example. Otherwise, a system default is used: zero for numeric types, the empty string for strings, false for bools. For embedded messages, the default value is always the "default instance" or "prototype" of the message, which has none of its fields set. Calling the accessor to get the value of an optional (or required) field which has not been explicitly set always returns that field's default value.
+
+·         repeated: the field may be repeated any number of times (including zero). The order of the repeated values will be preserved in the protocol buffer. Think of repeated fields as dynamically sized arrays.
+
+每一个字段都必须用以下之一的修饰符来修饰：
+
+l  required：必须提供字段值，否则对应的消息就会被认为是“未初始化的”。如果libprotobuf是以debug模式编译的，序列化一个未初始化的消息（message）将会导致一个断言错误。在优化过的编译情况下（译者注：例如release），该检查会被跳过，消息会被写入。然而，解析一个未初始化的消息仍然会失败（解析函数会返回false）。除此之外，一个required的字段与一个optional的字段就没有区别了。
+
+l  optional：字段值指定与否都可以。如果没有指定一个optional的字段值，它就会使用默认值。对简单类型来说，你可以指定你自己的默认值，就像我们在上面的例子中对phone number的type字段所做的一样。如果你不指定默认值，就会使用系统默认值：数据类型的默认值为0，string的默认值为空字符串，bool的默认值为false。对嵌套消息（message）来说，其默认值总是消息的“默认实例”或“原型”，即：没有任何一个字段是指定了值的。调用访问类来取一个未显式指定其值的optional（或者required）的字段的值，总是会返回字段的默认值。
+
+l  repeated：字段会重复N次（N可以为0）。重复的值的顺序将被保存在protocol buffer中。你只要将重复的字段视为动态大小的数组就可以了。
+
+Required Is Forever You should be very careful about marking fields as required. If at some point you wish to stop writing or sending a required field, it will be problematic to change the field to an optional field – old readers will consider messages without this field to be incomplete and may reject or drop them unintentionally. You should consider writing application-specific custom validation routines for your buffers instead. Some engineers at Google have come to the conclusion that using required does more harm than good; they prefer to use onlyoptional and repeated. However, this view is not universal.
+
+
+required是永久性的：在把一个字段标识为required的时候，你应该特别小心。如果在某些情况下你不想写入或者发送一个required的字段，那么将该字段更改为optional可能会遇到问题——旧版本的读者（译者注：即读取、解析消息的一方）会认为不含该字段的消息（message）是不完整的，从而有可能会拒绝解析。在这种情况下，你应该考虑编写特别针对于应用程序的、自定义的消息校验函数。Google的一些工程师得出了一个结论：使用required弊多于利；他们更愿意使用optional和repeated而不是required。当然，这个观点并不具有普遍性。
+
+文章来源：http://www.codelast.com/
+
+
+You'll find a complete guide to writing .proto files – including all the possible field types – in the Protocol Buffer Language Guide. Don't go looking for facilities similar to class inheritance, though – protocol buffers don't do that.
+
+
+你可以在Protocol Buffer Language Guide一文中找到编写.proto文件的完整指南（包括所有可能的字段类型）。但是，不要想在里面找到与类继承相似的特性，因为protocol buffers不是拿来做这个的。
+
+Compiling Your Protocol Buffers 编译你的protocol buffers
+
+
+Now that you have a .proto, the next thing you need to do is generate the classes you'll need to read and write AddressBook (and hence Personand PhoneNumber) messages. To do this, you need to run the protocol buffer compiler protoc on your .proto:
+
+1.    If you haven't installed the compiler, download the package and follow the instructions in the README.
+
+2.    Now run the compiler, specifying the source directory (where your application's source code lives – the current directory is used if you don't provide a value), the destination directory (where you want the generated code to go; often the same as $SRC_DIR), and the path to your.proto. In this case, you…:
+
+protoc -I=$SRC_DIR –cpp_out=$DST_DIR $SRC_DIR/addressbook.proto
+
+
+Because you want C++ classes, you use the –cpp_out option – similar options are provided for other supported languages.
+
+This generates the following files in your specified destination directory:
+
+·         addressbook.pb.h, the header which declares your generated classes.
+
+·         addressbook.pb.cc, which contains the implementation of your classes.
+
+在得到了一个.proto文件之后，下一步你就要生成可以读写AddressBook消息（当然也就包括了Person以及PhoneNumber消息）的类了。此时你需要运行protocol buffer编译器来编译你的.proto文件：
+
+1. 如果你还没有安装该编译器，下载安装包 并参照README文件中的说明来安装。
+
+2. 安装了之后，就可以运行编译器了。指定源目录（即你的应用程序源代码所在的目录——如果不指定的话，就使用当前目录）、目标目录（即生成的代码放置的目录，通常与$SRC_DIR是一样的），以及你的.proto文件所在的目录。在我们这里，可以这样用：
+
+protoc -I=$SRC_DIR –cpp_out=$DST_DIR $SRC_DIR/addressbook.proto
+
+
+因为需要生成的是C++类，所以使用了–cpp_out选项参数——protocol buffers也为其他支持的语言提供了类似的选项参数。这样就可以在你指定的目标目录下生成如下文件：
+
+l  addressbook.pb.h：声明你生成的类的头文件。
+
+l  addressbook.pb.cc：你生成的类的实现文件。
+
+ 
+
+The Protocol Buffer API
+
+
+Let's look at some of the generated code and see what classes and functions the compiler has created for you. If you look in tutorial.pb.h, you can see that you have a class for each message you specified in tutorial.proto. Looking closer at the Person class, you can see that the complier has generated accessors for each field. For example, for the name, id, email, and phone fields, you have these methods:
+
+让我们看一下生成的代码，了解一下编译器为你创建了什么样的类和函数。如果你看了tutorial.pb.h文件，就会发现你得到了一个类，它对应于tutorial.proto文件中写的每一个消息（message）。更深入一步，看看Person 类：编译器为每一个字段生成了读写函数。例如，对name，id，email以及phone字段，分别有如下函数：
+
+  // name
+  inline bool has_name() const;
+  inline void clear_name();
+  inline const ::std::string& name() const;
+  inline void set_name(const ::std::string& value);
+  inline void set_name(const char* value);
+  inline ::std::string* mutable_name();
+
+  // id
+  inline bool has_id() const;
+  inline void clear_id();
+  inline int32_t id() const;
+  inline void set_id(int32_t value);
+
+  // email
+  inline bool has_email() const;
+  inline void clear_email();
+  inline const ::std::string& email() const;
+  inline void set_email(const ::std::string& value);
+  inline void set_email(const char* value);
+  inline ::std::string* mutable_email();
+
+  // phone
+  inline int phone_size() const;
+  inline void clear_phone();
+  inline const ::google::protobuf::RepeatedPtrField< ::tutorial::Person_PhoneNumber >& phone() const;
+  inline ::google::protobuf::RepeatedPtrField< ::tutorial::Person_PhoneNumber >* mutable_phone();
+  inline const ::tutorial::Person_PhoneNumber& phone(int index) const;
+  inline ::tutorial::Person_PhoneNumber* mutable_phone(int index);
+  inline ::tutorial::Person_PhoneNumber* add_phone();
+
+
+As you can see, the getters have exactly the name as the field in lowercase, and the setter methods begin with set_. There are also has_ methods for each singular (required or optional) field which return true if that field has been set. Finally, each field has a clear_ method that un-sets the field back to its empty state.
+
+正如你所看到的，getter函数具有与字段名一模一样的名字，并且是小写的，而setter函数都是以set_前缀开头。此外，还有has_前缀的函数，对每一个单一的（required或optional的）字段（译者注：此处估计是“非repeated字段”的意思）来说，如果字段被置（set）了值，该函数会返回true。最后，每一个字段还有一个clear_前缀的函数，用来将字段重置（un-set）到空状态（empty state）。
+
+文章来源：http://www.codelast.com/
+
+
+While the numeric id field just has the basic accessor set described above, the name and email fields have a couple of extra methods because they're strings – a mutable_ getter that lets you get a direct pointer to the string, and an extra setter. Note that you can call mutable_email() even ifemail is not already set; it will be initialized to an empty string automatically. If you had a singular message field in this example, it would also have a mutable_ method but not a set_ method.
+
+
+然而，数值类型的字段id就只有如上所述的基本读写函数，name和email字段则有一些额外的函数，因为它们是string——前缀为mutable_的函数返回string的直接指针（direct pointer）。除此之外，还有一个额外的setter函数。注意：你甚至可以在email还没有被置（set）值的时候就调用mutable_email()，它会被自动初始化为一个空字符串。在此例中，如果有一个单一消息字段，那么它也会有一个mutable_ 前缀的函数，但是没有一个set_ 前缀的函数。
+
+ Repeated fields also have some special methods – if you look at the methods for the repeated phone field, you'll see that you can
+
+
+·         check the repeated field's _size (in other words, how many phone numbers are associated with this Person).
+
+·         get a specified phone number using its index.
+
+·         update an existing phone number at the specified index.
+
+·         add another phone number to the message which you can then edit (repeated scalar types have an add_ that just lets you pass in the new value).
+
+重复的字段也有一些特殊的函数——如果你看一下重复字段phone 的那些函数，就会发现你可以：
+
+l  得到重复字段的_size（换句话说，这个Person关联了多少个电话号码）。
+
+l  通过索引（index）来获取一个指定的电话号码。
+
+l  通过指定的索引（index）来更新一个已经存在的电话号码。
+
+l  向消息（message）中添加另一个电话号码，然后你可以编辑它（重复的标量类型有一个add_前缀的函数，允许你传新值进去）。
+
+ 
+
+For more information on exactly what members the protocol compiler generates for any particular field definition, see the C++ generated code reference.
+
+关于编译器如何生成特殊字段的更多信息，请查看文章C++ generated code reference。
+
+Enums and Nested Classes 枚举和嵌套类
+
+The generated code includes a PhoneType enum that corresponds to your .proto enum. You can refer to this type as Person::PhoneType and its values as Person::MOBILE, Person::HOME, and Person::WORK (the implementation details are a little more complicated, but you don't need to understand them to use the enum).
+
+生成的代码中包含了一个PhoneType 枚举，它对应于.proto文件中的那个枚举。你可以把这个类型当作Person::PhoneType，其值为Person::MOBILE，Person::HOME和Person::WORK（实现的细节稍微复杂了点，但是没关系，不理解它也不会影响你使用该枚举）。
+
+ 
+
+The compiler has also generated a nested class for you called Person::PhoneNumber. If you look at the code, you can see that the "real" class is actually called Person_PhoneNumber, but a typedef defined inside Person allows you to treat it as if it were a nested class. The only case where this makes a difference is if you want to forward-declare the class in another file – you cannot forward-declare nested types in C++, but you can forward-declare Person_PhoneNumber.
+
+编译器还生成了一个名为Person::PhoneNumber的嵌套类。如果你看看代码，就会发现“真实的”类实际上是叫做Person_PhoneNumber，只不过Person 内部的一个typedef允许你像一个嵌套类一样来对待它。这一点所造成的唯一一个区别就是：如果你想在另一个文件中对类进行前向声明（forward-declare）的话，你就不能在C++中对嵌套类型进行前向声明了，但是你可以对Person_PhoneNumber进行前向声明。
+
+Standard Message Methods 标准消息函数
+
+Each message class also contains a number of other methods that let you check or manipulate the entire message, including:
+
+·         bool IsInitialized() const;: checks if all the required fields have been set.
+
+·         string DebugString() const;: returns a human-readable representation of the message, particularly useful for debugging.
+
+·         void CopyFrom(const Person& from);: overwrites the message with the given message's values.
+
+·         void Clear();: clears all the elements back to the empty state.
+
+These and the I/O methods described in the following section implement the Message interface shared by all C++ protocol buffer classes. For more info, see the complete API documentation for Message.
+
+每一个消息（message）还包含了其他一系列函数，用来检查或管理整个消息，包括：
+
+l  bool IsInitialized() const;：检查是否全部的required字段都被置（set）了值。
+
+l  string DebugString() const;：返回一个易读的消息表示形式，对调试特别有用。
+
+l  void CopyFrom(const Person& from);：用外部消息的值，覆写调用者消息内部的值。
+
+l  void Clear();：将所有项复位到空状态（empty state）。
+
+这些函数以及后面章节将要提到的I/O函数实现了Message 的接口，它们被所有C++ protocol buffer类共享。更多信息，请查看文章 complete API documentation for Message。
+
+ 
+
+Parsing and Serialization 解析&序列化
+
+Finally, each protocol buffer class has methods for writing and reading messages of your chosen type using the protocol buffer binary format. These include:
+
+·         bool SerializeToString(string* output) const;: serializes the message and stores the bytes in the given string. Note that the bytes are binary, not text; we only use the string class as a convenient container.
+
+·         bool ParseFromString(const string& data);: parses a message from the given string.
+
+·         bool SerializeToOstream(ostream* output) const;: writes the message to the given C++ ostream.
+
+·         bool ParseFromIstream(istream* input);: parses a message from the given C++ istream.
+
+These are just a couple of the options provided for parsing and serialization. Again, see the Message API reference for a complete list.
+
+最后，每一个protocol buffer类都有读写你所选择的消息类型的函数。它们包括：
+
+l  bool SerializeToString(string* output) const;：将消息序列化并储存在指定的string中。注意里面的内容是二进制的，而不是文本；我们只是使用string作为一个很方便的容器。
+
+l  bool ParseFromString(const string& data);：从给定的string解析消息。
+
+l  bool SerializeToOstream(ostream* output) const;：将消息写入到给定的C++ ostream中。
+
+l  bool ParseFromIstream(istream* input);：从给定的C++ istream解析消息。
+
+这些函数只是用于解析和序列化的几个函数罢了。请再次参考Message API reference以查看完整的函数列表。
+

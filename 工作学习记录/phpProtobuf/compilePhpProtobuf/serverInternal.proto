@@ -1,0 +1,10 @@
+message NineOneLoginAuthReq {
+    required string Uin = 1;//用户的91Uin
+    required string SessionId = 2;//用户登陆SessionId
+}
+
+message NineOneLoginAuthAck {
+    required int32 ErrorCode = 1;//91平台返回的错误码(0=失败，1=成功(sessionId有效),2=AppId无效，3=Act无效，
+    //4=参数无效，5=sign无效，11=SessionId无效)
+    required string ErrorDesc = 2;//错误描述
+}
