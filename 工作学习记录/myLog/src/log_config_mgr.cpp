@@ -203,7 +203,7 @@ namespace np_log_config_mgr {
             assert(false);     
         }
         std::ofstream of;
-        of.open(logFilePath.c_str());
+        of.open(logFilePath.c_str(),std::ios::app);
         of.close();
         return true;    
     }
